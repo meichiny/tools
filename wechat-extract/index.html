@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>微信链接转换器 - CF代理版</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #f0f2f5; line-height: 1.6; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        h2 { margin-top: 0; color: #1a1a1a; }
+        textarea { width: 100%; height: 160px; border: 1px solid #ddd; border-radius: 8px; padding: 12px; font-family: monospace; box-sizing: border-box; resize: vertical; margin-bottom: 10px; }
+        .control-group { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+        input[type="text"] { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
+        button { background: #07c160; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        button:hover { background: #06ae56; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #log { font-size: 13px; color: #666; background: #f9f9f9; padding: 10px; border-radius: 6px; height: 100px; overflow-y: auto; border: 1px solid #eee; margin-bottom: 10px; white-space: pre-wrap; }
+        pre { background: #2d2d2d; color: #e6db74; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 14px; position: relative; }
+        .tag { display: inline-block; background: #e7f7ed; color: #07c160; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>微信文章链接转 HTML</h2>
+    <span class="tag">后端：Cloudflare Workers 代理</span>
+    
+    <div class="control-group">
+        <label>输出格式：</label>
+        <input type="text" id="format-input" value='<li><a href="{url}">{title}</a> - {date}</li>'>
+    </div>
+
+    <textarea id="url-input" placeholder="请在此粘贴微信 URL，一行一个..."></textarea>
+    
+    <div id="log">等待任务开始...</div>
+    <button id="start-btn">开始批量转换</button>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h3 style="margin: 0;">生成结果</h3>
+        <button id="copy-btn" style="background: #4a5568; padding: 5px 12px; font-size: 13px;">复制到剪贴板</button>
+    </div>
+    <pre id="output-code">结果将显示在这里...</pre>
+</div>
+
+<script>
+    // 替换成你在第一步中获得的 Cloudflare Worker 地址
+    const WORKER_ENDPOINT = 'https://wx-proxy.chinyoowen.workers.dev/';
+
+    const startBtn = document.getElementById('start-btn');
+    const logDiv = document.getElementById('log');
+    const outputPre = document.getElementById('output-code');
+    const urlInput = document.getElementById('url-input');
+
+    function writeLog(msg) {
+        logDiv.innerText += `\n[${new Date().toLocaleTimeString()}] ${msg}`;
+        logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    async function processUrls() {
+        const urls = urlInput.value.split('\n')
+            .map(u => u.trim())
+            .filter(u => u.startsWith('http'));
+
+        if (urls.length === 0) return alert('请输入有效的微信文章链接');
+
+        startBtn.disabled = true;
+        outputPre.textContent = '';
+        let results = [];
+        const format = document.getElementById('format-input').value;
+
+        for (let i = 0; i < urls.length; i++) {
+            const url = urls[i];
+            writeLog(`正在抓取 (${i+1}/${urls.length}): ${url.substring(0, 40)}...`);
+
+            try {
+                // 通过 Worker 请求
+                const proxyUrl = `${WORKER_ENDPOINT}?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const html = await response.text();
+
+                // 提取标题 (尝试多种正则)
+                const titleMatch = html.match(/var\s+msg_title\s*=\s*['"]([^'"]+)['"]/) || 
+                                 html.match(/property="og:title"\s+content="([^"]+)"/);
+                const title = titleMatch ? titleMatch[1].replace(/\\x26/g, '&') : "无法解析标题";
+
+                // 提取日期
+                const dateMatch = html.match(/(\d{4})-(\d{1,2})-(\d{1,2})/) || 
+                                 html.match(/publish_time">([^<]+)</);
+                const date = dateMatch ? dateMatch[1].trim() : "";
+
+                const line = format
+                    .replace(/{title}/g, title)
+                    .replace(/{url}/g, url)
+                    .replace(/{date}/g, date);
+
+                results.push(line);
+                outputPre.textContent = results.join('\n');
+                writeLog(`成功: ${title}`);
+
+            } catch (err) {
+                writeLog(`失败: ${err.message}`);
+                results.push(`<!-- 错误: ${url} -->`);
+            }
+
+            // 间隔 1.2 秒防止微信对 Worker IP 频率限制
+            if (i < urls.length - 1) await new Promise(r => setTimeout(r, 1200));
+        }
+
+        writeLog('--- 所有任务处理完成 ---');
+        startBtn.disabled = false;
+    }
+
+    startBtn.addEventListener('click', processUrls);
+
+    document.getElementById('copy-btn').onclick = () => {
+        navigator.clipboard.writeText(outputPre.textContent);
+        const originalText = document.getElementById('copy-btn').innerText;
+        document.getElementById('copy-btn').innerText = '已复制！';
+        setTimeout(() => document.getElementById('copy-btn').innerText = originalText, 2000);
+    };
+</script>
+
+</body>
+</html>
