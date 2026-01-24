@@ -26,7 +26,7 @@
     
     <div class="control-group">
         <label>输出格式：</label>
-        <input type="text" id="format-input" value='<li><a href="{url}">{title}</a> - {date}</li>'>
+        <input type="text" id="format-input" value='<p><a href="{url}" target="_blank">{title}</a> - {date}</p>'>
     </div>
 
     <textarea id="url-input" placeholder="请在此粘贴微信 URL，一行一个..."></textarea>
@@ -85,19 +85,31 @@
                 // 提取标题 (尝试多种正则)
                 const titleMatch = html.match(/var\s+msg_title\s*=\s*['"]([^'"]+)['"]/) || 
                                  html.match(/property="og:title"\s+content="([^"]+)"/);
-                const title = titleMatch ? titleMatch[1].replace(/\\x26/g, '&') : "无法解析标题";
+                const title = titleMatch ? titleMatch[1].replace(/\\x26/g, '&').replace(/&amp;/g, '&') : "无法解析标题";
 
                 // 提取日期
-                const dateMatch = html.match(/(\d{4})-(\d{1,2})-(\d{1,2})/) || 
-                                 html.match(/publish_time">([^<]+)</);
-                const date = dateMatch ? dateMatch[1].trim() : "";
+                // 强制格式化为 YYYY-MM-DD
+                const ctMatch = html.match(/var\s+ct\s*=\s*["'](\d+)["']/);
+                let dateStr = "";
+                if (ctMatch) {
+                    const timestamp = parseInt(ctMatch[1]) * 1000;
+                    const d = new Date(timestamp);
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    dateStr = `${year}-${month}-${day}`;
+                } else {
+                    // 如果找不到 ct，尝试备用日期匹配
+                    const altDateMatch = html.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+                    dateStr = altDateMatch ? altDateMatch[0] : "未知日期";
+                }
 
-                const line = format
-                    .replace(/{title}/g, title)
-                    .replace(/{url}/g, url)
-                    .replace(/{date}/g, date);
+                // 3. 构造指定 HTML 格式
+                // 使用 <p>，添加 target="_blank"，日期用 <span>
+                const line = `<p><a href="${url}" target="_blank">${title}</a><span>${dateStr}</span></p>`;
 
                 results.push(line);
+                // 实时在页面预览结果
                 outputPre.textContent = results.join('\n');
                 writeLog(`成功: ${title}`);
 
