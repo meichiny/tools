@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     footer.innerHTML = `
         <div class="footer-links">
-            <a href="/">首页</a>
+            <a href="/tools/">首页</a>
             <a href="${githubRepo}">GitHub 源码</a>
             <a href="${githubRepo}/issues">反馈建议</a>
         </div>
