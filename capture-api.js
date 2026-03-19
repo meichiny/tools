@@ -6,18 +6,25 @@
 const url = $request.url;
 const body = $response.body;
 
-// 匹配小红书相关 API
-if (url.includes("xiaohongshu")) {
-    // 打印到控制台
-    console.log("===== 小红书 API =====");
+// 匹配小红书 Feed/首页/发现相关 API
+const isFeedApi = url.includes("feed") ||
+    url.includes("home") ||
+    url.includes("discover") ||
+    url.includes("note") ||
+    url.includes("rec") ||
+    url.includes("edith.xiaohongshu.com");
+
+if (isFeedApi && body.length > 100) {
+    // 打印完整 URL
+    console.log("===== 小红书 Feed API =====");
     console.log("URL: " + url);
-    console.log("响应: " + body.substring(0, 3000));
+    console.log("响应: " + body.substring(0, 5000));
 
     // 弹出通知
     $notify(
-        "捕获小红书 API",
-        url.substring(0, 60),
-        "响应前100字符: " + body.substring(0, 100)
+        "捕获小红书 Feed API",
+        url.substring(0, 80),
+        "响应长度: " + body.length
     );
 }
 
