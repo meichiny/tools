@@ -176,19 +176,18 @@
 
     let isPreviewFolded = true;
 
-    // Stats
+    // Stats (grapheme-aware)
     function calcEstLines(text) {
         if (!text) return 0;
-        const cleaned = text.replace(/\s/g, '');
-        const len = cleaned.length;
-        if (len === 0) return 0;
+        const clusters = clustersToArray(text.replace(/\s/g, ''));
+        if (clusters.length === 0) return 0;
         const charsPerLine = 25;
-        return Math.ceil(len / charsPerLine);
+        return Math.ceil(clusters.length / charsPerLine);
     }
 
     function assessRisk(text) {
-        const raw = text.replace(/\s/g, '');
-        const len = raw.length;
+        const cleanGraphemes = [...eachGrapheme(text.replace(/\s/g, ''))];
+        const len = cleanGraphemes.length;
         const lines = calcEstLines(text);
         const items = [];
         let level = 'low';
@@ -231,18 +230,19 @@
         });
     }
 
-    // Strategies
+    // Strategies (grapheme-aware)
     function injectZeroWidth(text) {
         if (!text) return text;
         const ZWSP = '\u200B';
+        const clusters = clustersToArray(text);
         let result = '';
-        for (let i = 0; i < text.length; i++) {
-            result += text[i];
-            const ch = text[i];
+        for (let i = 0; i < clusters.length; i++) {
+            result += clusters[i];
+            const ch = clusters[i];
             if (ch === '\n' || ch === '\r') continue;
-            const isCJK = /[\u4e00-\u9fff\u3400-\u4dbf\uff00-\uffef]/.test(ch);
-            if ((i + 1) % (isCJK ? 3 : 5) === 0 && i < text.length - 1) {
-                const next = text[i + 1];
+            const isCJK = /[\u4e00-\u9fff]/.test(ch);
+            if ((i + 1) % (isCJK ? 3 : 5) === 0 && i < clusters.length - 1) {
+                const next = clusters[i + 1];
                 if (next !== '\n' && next !== '\r') {
                     result += ZWSP;
                 }
@@ -269,24 +269,28 @@
 
     function segmentText(text) {
         if (!text) return [];
+        const clusters = clustersToArray(text);
         const maxLen = 80;
         const segments = [];
-        let current = '';
-        for (let i = 0; i < text.length; i++) {
-            current += text[i];
-            if (current.length >= maxLen || (text[i] === '\n' && current.trim().length > 0)) {
-                if (current.trim()) {
-                    let seg = current.trim();
-                    if (seg.length > maxLen) {
-                        seg = seg.substring(0, maxLen);
-                        i -= (current.trim().length - maxLen);
+        let current = [];
+        for (let i = 0; i < clusters.length; i++) {
+            current.push(clusters[i]);
+            if (current.length >= maxLen || (clusters[i] === '\n' && current.join('').trim().length > 0)) {
+                const segStr = current.join('').trim();
+                if (segStr) {
+                    if (current.length > maxLen) {
+                        const truncated = current.slice(0, maxLen).join('');
+                        segments.push(truncated);
+                        i -= (current.length - maxLen);
+                    } else {
+                        segments.push(segStr);
                     }
-                    segments.push(seg);
-                    current = '';
+                    current = [];
                 }
             }
         }
-        if (current.trim()) segments.push(current.trim());
+        const last = current.join('').trim();
+        if (last) segments.push(last);
         return segments;
     }
 
@@ -312,7 +316,7 @@
         segmentOutput.style.display = 'none';
         segmentOutput.innerHTML = '';
 
-        if (useSegment && raw.replace(/\s/g, '').length > 100) {
+        if (useSegment && countGraphemes(raw.replace(/\s/g, '')) > 100) {
             const segs = segmentText(raw);
             if (segs.length > 1) {
                 let html = '<div style="font-weight:600;margin-bottom:8px;color:#a0671a;">分段粘贴指引：</div>';
@@ -352,6 +356,29 @@
         }
     }
 
+    // Grapheme cluster helpers
+    function* eachGrapheme(text) {
+        try {
+            const segmenter = new Intl.Segmenter();
+            for (const { segment } of segmenter.segment(text)) {
+                yield segment;
+            }
+        } catch {
+            for (const ch of text) yield ch;
+        }
+    }
+
+    function countGraphemes(text) {
+        if (!text) return 0;
+        let n = 0;
+        for (const _ of eachGrapheme(text)) n++;
+        return n;
+    }
+
+    function clustersToArray(text) {
+        return [...eachGrapheme(text)];
+    }
+
     function showToast(msg) {
         const toast = document.getElementById('toast');
         toast.textContent = msg;
@@ -378,7 +405,7 @@
                 // Show "全文" fold
                 previewText.className = 'moments-text folded';
                 previewFullBtn.className = 'moments-full-btn visible';
-            } else if (text.replace(/\s/g, '').length > 100) {
+            } else if (countGraphemes(text.replace(/\s/g, '')) > 100) {
                 // Severe fold (gray one-line)
                 previewText.className = 'moments-text severe-fold';
                 previewFullBtn.className = 'moments-full-btn';
