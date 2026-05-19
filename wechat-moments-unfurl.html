@@ -441,6 +441,13 @@
         return [...eachGrapheme(text)];
     }
 
+    function getEffectiveText() {
+        const raw = inputEl.value;
+        return document.getElementById('strategy-emoji').checked
+            ? convertWechatEmoji(raw)
+            : raw;
+    }
+
     function showToast(msg) {
         const toast = document.getElementById('toast');
         toast.textContent = msg;
@@ -483,10 +490,10 @@
 
     // Events
     inputEl.addEventListener('input', () => {
-        const text = inputEl.value;
+        const text = getEffectiveText();
         updateStats(text);
         updatePreview(text);
-        if (!text.trim()) {
+        if (!inputEl.value.trim()) {
             outputText.textContent = '点击「处理并复制」生成防折叠文案...';
             outputText.className = 'placeholder pre-wrap';
             segmentOutput.style.display = 'none';
@@ -508,14 +515,14 @@
         isPreviewFolded = true;
         previewFoldBtn.className = 'active';
         previewUnfoldBtn.className = '';
-        updatePreview(inputEl.value);
+        updatePreview(getEffectiveText());
     });
 
     previewUnfoldBtn.addEventListener('click', () => {
         isPreviewFolded = false;
         previewFoldBtn.className = '';
         previewUnfoldBtn.className = 'active';
-        updatePreview(inputEl.value);
+        updatePreview(getEffectiveText());
     });
 
     // Init
