@@ -108,6 +108,12 @@
         <div class="strategy-desc">将部分中文标点替换为 Unicode 同形字符，改变文本指纹</div>
 
         <label>
+            <input type="checkbox" id="strategy-emoji" checked>
+            <span>微信表情还原</span>
+        </label>
+        <div class="strategy-desc">将 [微笑] 等微信表情码替换为 Unicode emoji（推荐，默认开启）</div>
+
+        <label>
             <input type="checkbox" id="strategy-segment">
             <span>智能分段指引</span>
         </label>
@@ -255,6 +261,47 @@
         return ZWSP + result + ZWSP;
     }
 
+    // WeChat emoji codes → Unicode emoji
+    const wechatEmojiMap = {
+        '[微笑]': '😊', '[撇嘴]': '😦', '[色]': '😍', '[发呆]': '😳',
+        '[得意]': '😏', '[流泪]': '😭', '[害羞]': '☺️', '[闭嘴]': '😶',
+        '[睡]': '😴', '[大哭]': '😭', '[尴尬]': '😰', '[发怒]': '😡',
+        '[调皮]': '😜', '[呲牙]': '😁', '[惊讶]': '😮', '[难过]': '😞',
+        '[酷]': '😎', '[冷汗]': '😓', '[抓狂]': '🤯', '[吐]': '🤮',
+        '[偷笑]': '🤭', '[愉快]': '😄', '[白眼]': '🙄', '[傲慢]': '😏',
+        '[饥饿]': '😫', '[困]': '😪', '[惊恐]': '😱', '[流汗]': '😅',
+        '[憨笑]': '😁', '[悠闲]': '😎', '[奋斗]': '💪', '[咒骂]': '🤬',
+        '[疑问]': '❓', '[嘘]': '🤫', '[晕]': '😵', '[疯了]': '🤪',
+        '[衰]': '😩', '[骷髅]': '💀', '[敲打]': '🔨', '[再见]': '👋',
+        '[擦汗]': '😅', '[抠鼻]': '👃', '[鼓掌]': '👏', '[糗大了]': '😅',
+        '[坏笑]': '😏', '[左哼哼]': '😤', '[右哼哼]': '😤', '[哈欠]': '🥱',
+        '[鄙视]': '😒', '[委屈]': '😢', '[快哭了]': '😥', '[阴险]': '😈',
+        '[亲亲]': '😘', '[吓]': '😨', '[可怜]': '🥺', '[菜刀]': '🔪',
+        '[西瓜]': '🍉', '[啤酒]': '🍺', '[篮球]': '🏀', '[乒乓]': '🏓',
+        '[咖啡]': '☕', '[饭]': '🍚', '[猪头]': '🐷', '[玫瑰]': '🌹',
+        '[凋谢]': '🥀', '[嘴唇]': '💋', '[爱心]': '❤️', '[心碎]': '💔',
+        '[蛋糕]': '🎂', '[闪电]': '⚡', '[炸弹]': '💣', '[刀]': '🔪',
+        '[足球]': '⚽', '[瓢虫]': '🐞', '[便便]': '💩', '[月亮]': '🌙',
+        '[太阳]': '☀️', '[礼物]': '🎁', '[拥抱]': '🤗', '[强]': '👍',
+        '[弱]': '👎', '[握手]': '🤝', '[胜利]': '✌️', '[抱拳]': '🙏',
+        '[勾引]': '💁', '[拳头]': '👊', '[差劲]': '👎', '[爱你]': '❤️',
+        '[NO]': '🙅', '[OK]': '👌', '[爱情]': '💑', '[飞吻]': '💋',
+        '[跳跳]': '🤸', '[发抖]': '🥶', '[怄火]': '😤', '[转圈]': '🌀',
+        '[磕头]': '🙇', '[回头]': '🤔', '[跳绳]': '🏃', '[挥手]': '👋',
+        '[嘿哈]': '😆', '[捂脸]': '🤦', '[奸笑]': '😏', '[机智]': '🤓',
+        '[皱眉]': '😣', '[耶]': '✌️', '[吃瓜]': '🍉', '[加油]': '💪',
+        '[汗]': '😓', '[天啊]': '😱', '[Emm]': '😐', '[旺柴]': '🐶',
+        '[好的]': '👌', '[打脸]': '🤦', '[哇]': '😮', '[红包]': '🧧',
+        '[發]': '🧧', '[福]': '🧧', '[烟花]': '🎆', '[爆竹]': '🧨',
+        '[庆祝]': '🎉', '[合十]': '🙏', '[强壮]': '💪', '[让我看看]': '👀',
+        '[幽灵]': '👻', '[魔鬼]': '👿', '[鬼魂]': '👻', '[怄火]': '😤',
+        '[抱抱]': '🤗', '[社会社会]': '😎', '[加油加油]': '💪', '[好的]': '👍',
+    };
+
+    function convertWechatEmoji(text) {
+        return text.replace(/\[[^\[\]]+\]/g, match => wechatEmojiMap[match] || match);
+    }
+
     function replaceHomoglyphs(text) {
         const map = {
             '\uFF0C': '\u002C',
@@ -308,8 +355,10 @@
         let result = raw;
         const useZwsp = document.getElementById('strategy-zwsp').checked;
         const useHomoglyph = document.getElementById('strategy-homoglyph').checked;
+        const useEmoji = document.getElementById('strategy-emoji').checked;
         const useSegment = document.getElementById('strategy-segment').checked;
 
+        if (useEmoji) result = convertWechatEmoji(result);
         if (useHomoglyph) result = replaceHomoglyphs(result);
         if (useZwsp) result = injectZeroWidth(result);
 
@@ -320,8 +369,9 @@
         segmentOutput.style.display = 'none';
         segmentOutput.innerHTML = '';
 
-        if (useSegment && countGraphemes(raw.replace(/\s/g, '')) > 100) {
-            const segs = segmentText(raw);
+        const segBase = useEmoji ? convertWechatEmoji(raw) : raw;
+        if (useSegment && countGraphemes(segBase.replace(/\s/g, '')) > 100) {
+            const segs = segmentText(segBase);
             if (segs.length > 1) {
                 let html = '<div style="font-weight:600;margin-bottom:8px;color:#a0671a;">分段粘贴指引：</div>';
                 segs.forEach((seg, i) => {
