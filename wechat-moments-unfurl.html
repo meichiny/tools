@@ -182,13 +182,21 @@
 
     let isPreviewFolded = true;
 
-    // Stats (grapheme-aware)
+    // Stats (grapheme-aware, respect manual line breaks)
     function calcEstLines(text) {
         if (!text) return 0;
-        const clusters = clustersToArray(text.replace(/\s/g, ''));
-        if (clusters.length === 0) return 0;
         const charsPerLine = 25;
-        return Math.ceil(clusters.length / charsPerLine);
+        const rawLines = text.split('\n');
+        let total = 0;
+        for (const rawLine of rawLines) {
+            const clusters = clustersToArray(rawLine.replace(/\s/g, ''));
+            if (clusters.length === 0) {
+                total += 1;
+            } else {
+                total += Math.ceil(clusters.length / charsPerLine);
+            }
+        }
+        return total;
     }
 
     function assessRisk(text) {
