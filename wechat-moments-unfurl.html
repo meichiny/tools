@@ -240,9 +240,13 @@
             result += clusters[i];
             const ch = clusters[i];
             if (ch === '\n' || ch === '\r') continue;
+            // 跳过 ZWJ (U+200D) 和 Variation Selector (U+FE0F) — emoji 内部连接符
+            if (/^[\u200D\uFE0F]$/.test(ch)) continue;
+            // 如果下一个 cluster 是 ZWJ/VS，emoji 序列还没结束，不插入
+            const next = clusters[i + 1];
+            if (next && /^[\u200D\uFE0F]$/.test(next)) continue;
             const isCJK = /[\u4e00-\u9fff]/.test(ch);
             if ((i + 1) % (isCJK ? 3 : 5) === 0 && i < clusters.length - 1) {
-                const next = clusters[i + 1];
                 if (next !== '\n' && next !== '\r') {
                     result += ZWSP;
                 }
