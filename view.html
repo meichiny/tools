@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>二维码内容</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px;
+      min-height: 100vh;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px 22px;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      white-space: pre-wrap;     /* 保留换行与空格 */
+      word-break: break-word;    /* 长串不溢出 */
+      font-size: 18px;
+      line-height: 1.8;
+    }
+    .empty { color: #999; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card" id="content"></div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var t = params.get('t');
+      var el = document.getElementById('content');
+      if (t === null || t === '') {
+        el.className = 'card empty';
+        el.textContent = '（无内容）';
+        return;
+      }
+      // URLSearchParams.get 已完成百分号解码(%0A->换行, %20->空格)
+      el.textContent = t;
+    })();
+  </script>
+</body>
+</html>
