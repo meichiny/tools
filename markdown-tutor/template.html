@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown 学习工坊 · 本地版</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3C%21--%21%20Font%20Awesome%20Free%206.7.2%20by%20%40fontawesome%20-%20https%3A%2F%2Ffontawesome.com%2Flicense%2Ffree%20%28Icons%3A%20CC%20BY%204.0%29%20Copyright%202024%20Fonticons%2C%20Inc.%20--%3E%3Cg%20transform%3D%22translate%280%2010%29%20scale%280.15625%29%22%3E%3Cpath%20fill%3D%22%232f6feb%22%20d%3D%22M593.8%2059.1H46.2C20.7%2059.1%200%2079.8%200%20105.2v301.5c0%2025.5%2020.7%2046.2%2046.2%2046.2h547.7c25.5%200%2046.2-20.7%2046.1-46.1V105.2c0-25.4-20.7-46.1-46.2-46.1zM338.5%20360.6H277v-120l-61.5%2076.9-61.5-76.9v120H92.3V151.4h61.5l61.5%2076.9%2061.5-76.9h61.5v209.2zm135.3%203.1L381.5%20256H443V151.4h61.5V256H566z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --border: #e2e5ea;
+    --text: #24292f;
+    --muted: #6a737d;
+    --accent: #2f6feb;
+    --accent-soft: #e8f0fe;
+    --code-bg: #f0f2f5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* 动态视口：解决 iOS Safari 底部被地址栏遮挡 */
+    overflow: hidden; /* 禁止页面级滚动，内容一律在编辑/预览区内滚动 */
+  }
+
+  /* ===== 顶栏 ===== */
+  header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    z-index: 10;
+  }
+  header h1 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+  .logo { vertical-align: -6px; margin-right: 6px; flex-shrink: 0; }
+  header h1 span { color: var(--accent); }
+  .badge {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--code-bg);
+    border-radius: 10px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+  .spacer { flex: 1; }
+  /* 顶栏操作按钮组（桌面端：跟随标题同一行） */
+  .toolbar { display: flex; align-items: center; gap: 10px; }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { opacity: .9; }
+  .btn.danger:hover { background: #fde8e8; border-color: #d73a49; color: #d73a49; }
+  select.btn { appearance: auto; }
+
+  /* ===== 主区 ===== */
+  main {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    overflow: hidden; /* 防止子区域溢出挤掉页脚 */
+  }
+
+  /* --- 左：语法速查 --- */
+  aside {
+    width: 240px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px;
+    flex-shrink: 0;
+  }
+  aside h2 {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .card summary {
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card summary::-webkit-details-marker { display: none; }
+  .card summary::after {
+    content: "＋";
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .card[open] summary::after { content: "－"; }
+  .card summary:hover { background: var(--accent-soft); }
+  .card .body { padding: 8px 10px 10px; border-top: 1px solid var(--border); }
+  .card .desc { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+  .card pre {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 12px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .insert-btn {
+    width: 100%;
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    background: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .insert-btn:hover { background: var(--accent-soft); }
+
+  /* --- 中：编辑器 --- */
+  #editorWrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
+    border-right: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .pane-head {
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background: #fafbfc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #editor {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 16px;
+    font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    background: #fff;
+    tab-size: 4;
+  }
+
+  /* --- 右：预览 --- */
+  #previewWrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
+    background: var(--panel);
+  }
+  #preview {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px 24px;
+  }
+  #preview h1, #preview h2, #preview h3, #preview h4 {
+    margin: 1.2em 0 .5em;
+    line-height: 1.3;
+  }
+  #preview h1 { font-size: 1.7em; border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+  #preview h2 { font-size: 1.4em; border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+  #preview h3 { font-size: 1.2em; }
+  #preview p { margin: .8em 0; line-height: 1.7; }
+  #preview ul, #preview ol { padding-left: 1.6em; margin: .8em 0; line-height: 1.7; }
+  #preview li { margin: .25em 0; }
+  #preview code {
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: .15em .4em;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: .9em;
+  }
+  #preview pre {
+    background: #f6f8fa;
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    margin: .8em 0;
+    line-height: 1.5;
+    border: 1px solid var(--border);
+  }
+  #preview pre code { background: none; padding: 0; }
+  #preview blockquote {
+    border-left: 4px solid var(--accent);
+    margin: .8em 0;
+    padding: .3em 1em;
+    color: var(--muted);
+    background: #fafbfc;
+  }
+  #preview a { color: var(--accent); text-decoration: none; }
+  #preview a:hover { text-decoration: underline; }
+  #preview img { max-width: 100%; border-radius: 6px; }
+  #preview table {
+    border-collapse: collapse;
+    margin: .8em 0;
+    display: block;
+    overflow-x: auto;
+  }
+  #preview th, #preview td {
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    font-size: .95em;
+  }
+  #preview th { background: #f6f8fa; }
+  #preview hr { border: none; border-top: 1px solid var(--border); margin: 1.5em 0; }
+  #preview .task-list-item { list-style: none; }
+
+  /* ===== 底部状态栏 ===== */
+  footer {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    flex-shrink: 0; /* 页脚永不被压缩 */
+    position: sticky; /* 即使页面意外滚动，页脚也钉在底部可见 */
+    bottom: 0;
+    z-index: 5;
+  }
+  #saveHint { color: #22863a; }
+  .author { margin-left: auto; }
+  .kbd {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0 5px;
+    font-family: monospace;
+    font-size: 11px;
+  }
+
+  /* ===== 代码高亮配色（github 浅色风） ===== */
+  .hljs-comment, .hljs-quote { color: #6a737d; font-style: italic; }
+  .hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-doctag { color: #d73a49; }
+  .hljs-string, .hljs-regexp, .hljs-addition { color: #032f62; }
+  .hljs-number, .hljs-symbol, .hljs-bullet, .hljs-link { color: #005cc5; }
+  .hljs-title, .hljs-section, .hljs-name { color: #6f42c1; }
+  .hljs-attr, .hljs-attribute, .hljs-variable, .hljs-template-variable { color: #005cc5; }
+  .hljs-built_in, .hljs-builtin-name, .hljs-type, .hljs-class .hljs-title { color: #e36209; }
+  .hljs-meta, .hljs-selector-id, .hljs-selector-class { color: #6f42c1; }
+  .hljs-emphasis { font-style: italic; }
+  .hljs-strong { font-weight: 700; }
+  .hljs-deletion { color: #b31d28; }
+
+  /* ===== 对照学习模式（弹层） ===== */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, .5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal-overlay[hidden] { display: none; }
+  .modal { background: #fff; border-radius: 12px; width: min(960px, 94vw); height: min(640px, 90vh); display: flex; flex-direction: column; box-shadow: 0 24px 64px rgba(0,0,0,.35); overflow: hidden; }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); background: #fafbfc; }
+  .modal-head .title { font-size: 15px; font-weight: 700; }
+  .modal-head .btn { padding: 4px 10px; }
+  .modal-body { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+  .learn-col { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border-right: 1px solid var(--border); }
+  .learn-col:last-child { border-right: none; }
+  #learnSource { flex: 1; overflow-y: auto; padding: 12px 14px; background: #fafbfc; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; line-height: 1.6; }
+  .learn-line { display: flex; align-items: baseline; gap: 8px; padding: 4px 0; border-bottom: 1px dashed #eef0f3; }
+  .learn-line:last-child { border-bottom: none; }
+  .ln { color: #b6bdc6; font-size: 11px; width: 20px; text-align: right; flex-shrink: 0; user-select: none; }
+  .lcode { color: var(--text); white-space: pre-wrap; word-break: break-all; }
+  .lnote { color: #8a919c; font-size: 12px; flex-shrink: 0; }
+  .learn-preview { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .learn-preview h1, .learn-preview h2, .learn-preview h3, .learn-preview h4 { margin: 1.2em 0 .5em; line-height: 1.3; }
+  .learn-preview h1 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+  .learn-preview h2 { font-size: 1.3em; border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+  .learn-preview h3 { font-size: 1.15em; }
+  .learn-preview p { margin: .6em 0; line-height: 1.7; }
+  .learn-preview ul, .learn-preview ol { padding-left: 1.6em; margin: .6em 0; line-height: 1.7; }
+  .learn-preview li { margin: .2em 0; }
+  .learn-preview code { background: var(--code-bg); border-radius: 4px; padding: .15em .4em; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .9em; }
+  .learn-preview pre { background: #f6f8fa; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; overflow-x: auto; margin: .6em 0; line-height: 1.5; }
+  .learn-preview pre code { background: none; padding: 0; }
+  .learn-preview blockquote { border-left: 4px solid var(--accent); margin: .6em 0; padding: .3em 1em; color: var(--muted); background: #fafbfc; }
+  .learn-preview a { color: var(--accent); text-decoration: none; }
+  .learn-preview img { max-width: 100%; border-radius: 6px; }
+  .learn-preview table { border-collapse: collapse; margin: .6em 0; }
+  .learn-preview th, .learn-preview td { border: 1px solid var(--border); padding: 5px 10px; font-size: .95em; }
+  .learn-preview th { background: #f6f8fa; }
+  .learn-preview hr { border: none; border-top: 1px solid var(--border); margin: 1.2em 0; }
+  .modal-foot { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid var(--border); background: #fafbfc; font-size: 12px; color: var(--muted); }
+
+  /* ===== 练习挑战 ===== */
+  .modal.chal { width: min(760px, 94vw); height: min(600px, 90vh); }
+  .chal-body { display: block; overflow-y: auto; padding: 20px 24px; }
+  .chal-quest { font-size: 16px; font-weight: 600; line-height: 1.6; margin-bottom: 4px; }
+  .chal-level { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .chal-options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .chal-option {
+    border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px;
+    cursor: pointer; font-size: 14px; text-align: left; background: #fff;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .chal-option:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .chal-option.selected { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .chal-option.correct { border-color: #22863a; background: #e6ffec; }
+  .chal-option.wrong { border-color: #d73a49; background: #ffeef0; }
+  .chal-option:disabled { cursor: default; opacity: 1; }
+  .chal-option .opt-letter { color: var(--muted); font-weight: 400; margin-right: 8px; }
+  .chal-feedback { border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 13px; line-height: 1.7; }
+  .chal-feedback.ok { background: #e6ffec; color: #1a7f37; border: 1px solid #b4e3c2; }
+  .chal-feedback.bad { background: #ffeef0; color: #b31d28; border: 1px solid #f0c0c6; }
+  .chal-feedback .why { display: block; margin-top: 4px; color: var(--muted); }
+  .chal-progress { height: 6px; background: var(--code-bg); border-radius: 3px; overflow: hidden; margin: 6px 0 16px; }
+  .chal-progress .bar { height: 100%; background: var(--accent); border-radius: 3px; transition: width .3s; }
+  .chal-result { text-align: center; padding: 20px 0; }
+  .chal-result .big { font-size: 56px; margin-bottom: 10px; }
+  .chal-result .score { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .chal-result .comment { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+  .chal-stars { font-size: 22px; letter-spacing: 4px; margin-bottom: 8px; }
+  .chal-tag { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 10px; padding: 2px 10px; font-size: 12px; margin-left: 8px; }
+  .chal-menu { padding: 6px 0; }
+  .chal-menu-tip { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .chal-menu-card { display: flex; align-items: center; gap: 14px; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer; background: #fff; width: 100%; text-align: left; }
+  .chal-menu-card:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .chal-menu-card .emoji { font-size: 26px; }
+  .chal-menu-card .info { flex: 1; }
+  .chal-menu-card .info .name { font-weight: 700; font-size: 14px; }
+  .chal-menu-card .info .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .chal-menu-card .arrow { color: var(--muted); font-weight: 700; }
+
+  /* ===== 学习路径提示条 ===== */
+  #tipBar {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  /* ===== 响应式（移动端适配） ===== */
+  .mobile-only { display: none; }
+  .mobile-tabs { display: none; }
+  #drawerMask { display: none; }
+
+  @media (max-width: 900px) {
+    /* 语法速查 → 左侧抽屉 */
+    aside {
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 90;
+      width: 78vw;
+      max-width: 300px;
+      transform: translateX(-105%);
+      transition: transform .25s ease;
+      box-shadow: none;
+    }
+    aside.drawer-open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, .25);
+    }
+    #drawerMask {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .45);
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    #drawerMask.show { opacity: 1; pointer-events: auto; }
+
+    /* 主区纵向，编辑/预览 Tab 切换 */
+    main { flex-direction: column; }
+    .mobile-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--panel); }
+    .mobile-tabs .tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .mobile-tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+    #editorWrap, #previewWrap { min-height: 0; }
+    #previewWrap.hidden-tab, #editorWrap.hidden-tab { display: none; }
+
+    /* 顶栏精简 */
+    header { padding: 8px 10px; gap: 6px; }
+    header h1 { font-size: 14px; }
+    header h1 .logo { width: 20px; height: 20px; vertical-align: -4px; }
+    .btn { padding: 5px 9px; font-size: 12px; }
+    .badge, .desktop-only, .full { display: none; }
+    .mobile-only { display: inline-block; }
+    /* 操作按钮组独立成一行，flex 均分自适应，窄屏也不换行 */
+    .toolbar {
+      flex: 1 1 100%;
+      display: flex;
+      gap: 6px;
+      min-width: 0;
+    }
+    .toolbar > button.btn {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 5px 4px;
+      text-align: center;
+      overflow: hidden;
+    }
+    #exampleSelect { width: 112px; max-width: none; }
+    .pane-head { font-size: 11px; padding: 6px 10px; }
+    footer { font-size: 11px; padding: 5px 10px; }
+  }
+
+  /* 弹窗窄屏单列（学习对照） */
+  @media (max-width: 700px) {
+    .modal-body { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+    .learn-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .learn-col:last-child { border-bottom: none; }
+    .learn-preview { padding: 14px 16px; }
+    .chal-body { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><svg class="logo" viewBox="0 0 100 100" width="25" height="25" aria-hidden="true"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com/license/free (Icons: CC BY 4.0) Copyright 2024 Fonticons, Inc. --><g transform="translate(0 10) scale(0.15625)"><path fill="#2f6feb" d="M593.8 59.1H46.2C20.7 59.1 0 79.8 0 105.2v301.5c0 25.5 20.7 46.2 46.2 46.2h547.7c25.5 0 46.2-20.7 46.1-46.1V105.2c0-25.4-20.7-46.1-46.2-46.1zM338.5 360.6H277v-120l-61.5 76.9-61.5-76.9v120H92.3V151.4h61.5l61.5 76.9 61.5-76.9h61.5v209.2zm135.3 3.1L381.5 256H443V151.4h61.5V256H566z"/></g></svg>Markdown <span>学习工坊</span></h1>
+  <span class="badge desktop-only">100% 本地 · 无需联网</span>
+  <span class="spacer"></span>
+  <div class="toolbar">
+    <button id="drawerBtn" class="btn mobile-only" title="语法速查">📖<span class="full"> 语法</span></button>
+    <select id="exampleSelect" class="btn" title="载入示例">
+      <option value="">📚 选择示例…</option>
+      <option value="beginner">🌱 入门示例</option>
+      <option value="advanced">🚀 进阶示例</option>
+      <option value="article">📝 完整文章</option>
+    </select>
+    <button id="chalBtn" class="btn primary" title="用选择题闯关，检验学习成果">🎯 <span class="full">练习挑战</span></button>
+    <button id="clearBtn" class="btn danger" title="清空编辑器">🗑<span class="full"> 清空</span></button>
+    <button id="downloadBtn" class="btn" title="下载为 .md 文件">⬇<span class="full"> 下载</span></button>
+  </div>
+</header>
+
+<!-- 学习路径提示条 -->
+<div id="tipBar">💡 学习路径：先载入「入门示例」练手 → 点语法卡「📖 学习」逐行对照 → 用「🎯 挑战」检验成果</div>
+
+<main>
+  <!-- 移动端编辑/预览切换 Tab -->
+  <div id="mobileTabs" class="mobile-tabs">
+    <button class="tab active" data-tab="editor">✍️ 编辑</button>
+    <button class="tab" data-tab="preview">👀 预览</button>
+  </div>
+  <!-- 左：语法速查 -->
+  <aside>
+    <h2>语法速查 · 点击插入</h2>
+    <div id="cheatCards"></div>
+  </aside>
+
+  <!-- 中：编辑器 -->
+  <section id="editorWrap">
+    <div class="pane-head">
+      <span>✍️ 在这里写 Markdown</span>
+      <span class="desktop-only"><span class="kbd">Ctrl</span>+<span class="kbd">B</span> 加粗 · <span class="kbd">Ctrl</span>+<span class="kbd">I</span> 斜体 · <span class="kbd">Tab</span> 缩进</span>
+    </div>
+    <textarea id="editor" spellcheck="false" placeholder="从左侧点一个语法卡片试试，或者先载入一个示例 👉"></textarea>
+  </section>
+
+  <!-- 右：预览（窄屏默认隐藏，点「预览」Tab 显示） -->
+  <section id="previewWrap" class="hidden-tab">
+    <div class="pane-head"><span>👀 实时预览</span></div>
+    <div id="preview"></div>
+  </section>
+</main>
+
+  <footer>
+  <span id="saveHint">💾 自动保存到本地浏览器</span>
+  <span id="charCount">0 字</span>
+  <span class="author">© 2026 bengdadai</span>
+</footer>
+
+<!-- 移动端抽屉遮罩 -->
+<div id="drawerMask"></div>
+
+<!-- 对照学习模式弹层 -->
+<div id="learnModal" class="modal-overlay" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <span class="title" id="learnTitle">📖 对照学习</span>
+      <button id="learnClose" class="btn">✕ 关闭</button>
+    </div>
+    <div class="modal-body">
+      <div class="learn-col">
+        <div class="pane-head">📄 源码 · 逐行讲解</div>
+        <div id="learnSource"></div>
+      </div>
+      <div class="learn-col">
+        <div class="pane-head">✨ 效果预览</div>
+        <div id="learnPreview" class="learn-preview"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span id="learnTip"></span>
+      <span style="flex:1"></span>
+      <button id="learnInsert" class="btn primary">插入到编辑器 ✏️</button>
+    </div>
+  </div>
+</div>
+
+<!-- 练习挑战弹层 -->
+<div id="chalModal" class="modal-overlay" hidden>
+  <div class="modal chal">
+    <div class="modal-head">
+      <span class="title" id="chalTitle">🎯 练习挑战</span>
+      <button id="chalClose" class="btn">✕ 关闭</button>
+    </div>
+    <div class="chal-body" id="chalArea"></div>
+    <div class="modal-foot">
+      <span id="chalInfo">得分：0</span>
+      <span style="flex:1"></span>
+      <button id="chalAction" class="btn primary">确认答案</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/*__HIGHLIGHT_JS_SRC__*/
+</script>
+<script>
+/*__MARKDOWN_IT_SRC__*/
+</script>
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "md-tutor-content-v1";
+
+  var md = window.markdownit({
+    html: false,      // 新手阶段：显示源码而非执行 HTML，更安全
+    linkify: true,
+    typographer: true
+  });
+
+  /* ---------- 语法速查卡片数据 ---------- */
+  var CHEATS = [
+    { name: "# 标题", desc: "行首加 #，最多 6 级。# 越多，字号越小。", code: "# 一级标题\n## 二级标题\n### 三级标题",
+      learn: [
+        { line: "# 一级标题", note: "1 个 # = 一级标题（最大）" },
+        { line: "## 二级标题", note: "2 个 # = 二级标题" },
+        { line: "### 三级标题", note: "3 个 # = 三级标题，最多 6 级" }
+      ] },
+    { name: "**加粗** 与 *斜体*", desc: "用 * 或 _ 包裹文字。加粗用两个，斜体用一个。", code: "**这是加粗**\n*这是斜体*\n***加粗又斜体***",
+      learn: [
+        { line: "**这是加粗**", note: "两个 * 包裹 = 加粗，重点强调" },
+        { line: "*这是斜体*", note: "一个 * 包裹 = 斜体，轻量强调" },
+        { line: "***加粗又斜体***", note: "三个 * 包裹 = 又粗又斜" }
+      ] },
+    { name: "~~删除线~~", desc: "用两个波浪线包裹，显示为划线效果。", code: "~~这句话被划掉了~~",
+      learn: [
+        { line: "~~这句话被划掉了~~", note: "两个 ~ 包裹 = 删除线，常用于表示废弃内容" }
+      ] },
+    { name: "- 无序列表", desc: "行首用 -、* 或 + 加空格。缩进两个空格可做嵌套。", code: "- 苹果\n- 香蕉\n  - 热带香蕉\n- 橙子",
+      learn: [
+        { line: "- 苹果", note: "- 加空格 = 一个列表项" },
+        { line: "- 香蕉", note: "每个列表项都是新的一行" },
+        { line: "  - 热带香蕉", note: "前面缩进 2 格 = 嵌套子列表" },
+        { line: "- 橙子", note: "回到顶格继续写，回到外层" }
+      ] },
+    { name: "1. 有序列表", desc: "行首用「数字 + 点 + 空格」。数字不连续也没关系。", code: "1. 第一步\n2. 第二步\n3. 第三步",
+      learn: [
+        { line: "1. 第一步", note: "数字 + 点 + 空格 = 有序列表项" },
+        { line: "2. 第二步", note: "按顺序递增" },
+        { line: "3. 第三步", note: "写错数字也会自动重新编号，放心写" }
+      ] },
+    { name: "- [ ] 任务清单", desc: "列表项里加 [ ] 或 [x]，可勾选状态。", code: "- [x] 学会标题\n- [ ] 学会表格\n- [ ] 学会代码块",
+      learn: [
+        { line: "- [x] 学会标题", note: "[x] = 已完成（打勾）" },
+        { line: "- [ ] 学会表格", note: "[ ] = 未完成（空格）" },
+        { line: "- [ ] 学会代码块", note: "本质是列表 + 勾选框的组合" }
+      ] },
+    { name: "[链接](网址)", desc: "方括号写文字，圆括号写网址。", code: "[访问示例网站](https://example.com)\n\n也可以这样：<https://example.com>",
+      learn: [
+        { line: "[访问示例网站](https://example.com)", note: "方括号 = 显示的文字，圆括号 = 点击跳转的网址" },
+        { line: "", note: "（空行分隔两个段落）" },
+        { line: "也可以这样：<https://example.com>", note: "用尖括号包网址，直接显示成可点击链接" }
+      ] },
+    { name: "![图片](地址)", desc: "和链接很像，前面多一个感叹号。", code: "![图片描述](https://picsum.photos/400/200)",
+      learn: [
+        { line: "![图片描述](https://picsum.photos/400/200)", note: "感叹号 = 图片；方括号 = 图片说明（加载失败时显示）；圆括号 = 图片地址" }
+      ] },
+    { name: "> 引用", desc: "行首加 > 和空格。可多层嵌套。", code: "> 这是一句引用\n>\n> 引用的第二段",
+      learn: [
+        { line: "> 这是一句引用", note: "> 加空格 = 引用块" },
+        { line: ">", note: "空引用行 = 段落分隔" },
+        { line: "> 引用的第二段", note: "多行引用就每行都加 >" }
+      ] },
+    { name: "`行内代码`", desc: "用反引号包裹，代码会以等宽字体显示。", code: "运行命令：`npm install`",
+      learn: [
+        { line: "运行命令：`npm install`", note: "反引号包裹 = 行内代码，适合嵌在句子里" }
+      ] },
+    { name: "```代码块```", desc: "三个反引号包裹多行代码。可指定语言高亮语法。", code: "```python\nprint(\"你好，世界\")\n```",
+      learn: [
+        { line: "```python", note: "开头三个反引号 + 语言名（不写也能用）" },
+        { line: "print(\"你好，世界\")", note: "中间任意行代码" },
+        { line: "```", note: "结尾三个反引号，代码块结束" }
+      ] },
+    { name: "| 表格 |", desc: "用竖线和横线画表格。第二行是表头分隔线。", code: "| 姓名 | 城市 |\n| --- | --- |\n| 小明 | 上海 |\n| 小红 | 北京 |",
+      learn: [
+        { line: "| 姓名 | 城市 |", note: "第一行 = 表头，竖线 | 分隔各列" },
+        { line: "| --- | --- |", note: "第二行必须写分隔线（---），表格才能生效" },
+        { line: "| 小明 | 上海 |", note: "后面每行 = 一行数据" },
+        { line: "| 小红 | 北京 |", note: "列数对齐即可，不齐也能渲染" }
+      ] },
+    { name: "--- 分割线", desc: "单独一行写三个以上 -、* 或 _。", code: "上面是正文\n\n---\n\n下面是新内容",
+      learn: [
+        { line: "上面是正文", note: "分割线之前的内容" },
+        { line: "", note: "（空行）" },
+        { line: "---", note: "单独一行写 3 个以上 - = 分割线" },
+        { line: "", note: "（空行）" },
+        { line: "下面是新内容", note: "分割线之后的内容" }
+      ] },
+    { name: "\\ 转义符", desc: "想显示 Markdown 特殊符号本身时，前面加反斜杠。", code: "\\*这不是斜体\\*\n\\# 这不是标题",
+      learn: [
+        { line: "\\*这不是斜体\\*", note: "反斜杠让 * 显示为普通字符，不再触发斜体" },
+        { line: "\\# 这不是标题", note: "反斜杠让 # 显示为普通字符，不再触发标题" }
+      ] }
+  ];
+
+  var EXAMPLES = {
+    beginner: "# 🌱 我的第一篇 Markdown\n\n欢迎来到 **Markdown 学习工坊**！\n\n## 今天学什么\n\n- 标题怎么写\n- *强调* 怎么写\n- 列表怎么写\n\n## 试试看\n\n1. 把上面改成你自己的话\n2. 看看右侧预览有什么变化\n3. 点左侧的语法卡片，插入更多语法\n\n> 小提示：右上角可以一键载入示例，内容会自动保存在你的浏览器里。",
+    advanced: "# 🚀 进阶语法练习\n\n## 任务清单\n\n- [x] 学会基础语法\n- [ ] 学会表格\n- [ ] 学会代码块\n\n## 代码块\n\n```javascript\nfunction hello(name) {\n  console.log(\"你好，\" + name);\n}\n```\n\n## 表格\n\n| 语法 | 用途 | 难度 |\n| --- | --- | --- |\n| `**加粗**` | 强调重点 | ⭐ |\n| `|表格|` | 展示数据 | ⭐⭐ |\n| `~~~代码~~~` | 贴代码 | ⭐⭐⭐ |\n\n## 引用与分割线\n\n> 学习最好的时间，是现在。\n\n---\n\n试试把 `内联代码` 和 [链接](https://markdown.com.cn) 也加上！",
+    article: "# 周末去爬山\n\n> 记一次说走就走的短途旅行\n\n## 出发前\n\n上周五晚上，朋友发来一条消息：**\"明天去爬山吗？\"** 我犹豫了 3 秒，然后回了一个字：*去*。\n\n准备的东西：\n\n- [x] 登山鞋\n- [x] 两瓶水\n- [x] 充电宝\n- [ ] 防晒霜（忘了 😅）\n\n## 路上\n\n山不算高，但坡很陡。我们爬了大约 **2 小时**，中途休息了 3 次。\n\n> 朋友说：\"爬山最累的不是上山，是第二天起床。\"\n\n## 山顶\n\n山顶的风景值得一切辛苦：\n\n| 时间 | 看到的 |\n| --- | --- |\n| 日出前 | 云海 |\n| 日出后 | 整座城市 |\n\n```\n山顶信号不好\n把手机调成飞行模式\n世界一下子安静了\n```\n\n---\n\n下山后我们去吃了火锅，完美的一天。\n\n*—— 完 ——*"
+  };
+
+  /* ---------- DOM ---------- */
+  var editor = document.getElementById("editor");
+  var preview = document.getElementById("preview");
+  var cardsBox = document.getElementById("cheatCards");
+  var exampleSelect = document.getElementById("exampleSelect");
+  var charCount = document.getElementById("charCount");
+  var saveHint = document.getElementById("saveHint");
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    preview.innerHTML = md.render(editor.value);
+    preview.querySelectorAll("pre code").forEach(function (el) {
+      hljs.highlightElement(el);
+    });
+    charCount.textContent = editor.value.replace(/\s/g, "").length + " 字（不含空格）";
+  }
+
+  /* ---------- 语法卡片 ---------- */
+  CHEATS.forEach(function (card) {
+    var el = document.createElement("details");
+    el.className = "card";
+
+    var sum = document.createElement("summary");
+    sum.textContent = card.name;
+
+    var body = document.createElement("div");
+    body.className = "body";
+
+    var desc = document.createElement("div");
+    desc.className = "desc";
+    desc.textContent = card.desc;
+
+    var pre = document.createElement("pre");
+    pre.textContent = card.code;
+
+    var btnRow = document.createElement("div");
+    btnRow.style.cssText = "display:flex;gap:6px;";
+
+    var learnBtn = document.createElement("button");
+    learnBtn.className = "insert-btn";
+    learnBtn.textContent = "📖 学习";
+    learnBtn.style.cssText = "flex:1;border-style:solid;background:var(--accent);border-color:var(--accent);color:#fff;";
+    learnBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openLearn(card);
+    });
+
+    var insBtn = document.createElement("button");
+    insBtn.className = "insert-btn";
+    insBtn.textContent = "插入示例";
+    insBtn.style.flex = "1";
+    insBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      insertAtCursor(editor, card.code + "\n\n");
+      el.open = false;
+      render();
+    });
+
+    btnRow.appendChild(learnBtn);
+    btnRow.appendChild(insBtn);
+    body.appendChild(desc);
+    body.appendChild(pre);
+    body.appendChild(btnRow);
+    el.appendChild(sum);
+    el.appendChild(body);
+    cardsBox.appendChild(el);
+  });
+
+  /* ---------- 工具函数 ---------- */
+  function insertAtCursor(textarea, text) {
+    var start = textarea.selectionStart;
+    var end = textarea.selectionEnd;
+    var value = textarea.value;
+    textarea.value = value.slice(0, start) + text + value.slice(end);
+    textarea.selectionStart = textarea.selectionEnd = start + text.length;
+    textarea.focus();
+  }
+
+  function wrapSelection(before, after) {
+    var start = editor.selectionStart;
+    var end = editor.selectionEnd;
+    var selected = editor.value.slice(start, end) || "文字";
+    insertAtCursor(editor, before + selected + after);
+  }
+
+  /* ---------- 快捷键 ---------- */
+  editor.addEventListener("keydown", function (e) {
+    // Tab 键插入缩进
+    if (e.key === "Tab") {
+      e.preventDefault();
+      insertAtCursor(editor, "  ");
+      render();
+      return;
+    }
+    if (!(e.ctrlKey || e.metaKey)) return;
+    if (e.key === "b" || e.key === "B") {
+      e.preventDefault();
+      wrapSelection("**", "**");
+      render();
+    } else if (e.key === "i" || e.key === "I") {
+      e.preventDefault();
+      wrapSelection("*", "*");
+      render();
+    } else if (e.key === "k" || e.key === "K") {
+      e.preventDefault();
+      wrapSelection("`", "`");
+      render();
+    }
+  });
+
+  /* ---------- 自动保存 ---------- */
+  var saveTimer = null;
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      try {
+        localStorage.setItem(STORAGE_KEY, editor.value);
+        saveHint.textContent = "💾 已自动保存 ✓";
+        setTimeout(function () {
+          saveHint.textContent = "💾 自动保存到本地浏览器";
+        }, 2000);
+      } catch (err) {
+        saveHint.textContent = "⚠ 保存失败（浏览器限制）";
+      }
+    }, 500);
+  }
+
+  editor.addEventListener("input", function () {
+    render();
+    scheduleSave();
+  });
+
+  /* ---------- 示例 / 清空 / 下载 ---------- */
+  exampleSelect.addEventListener("change", function () {
+    var key = exampleSelect.value;
+    if (!key || !EXAMPLES[key]) return;
+    editor.value = EXAMPLES[key];
+    render();
+    scheduleSave();
+    // 保留选中项，方便看出当前内容对应哪个示例（选“选择示例…”可回到初始状态）
+  });
+
+  clearBtn.addEventListener("click", function () {
+    if (editor.value && !confirm("确定清空当前内容吗？")) return;
+    editor.value = "";
+    render();
+    scheduleSave();
+  });
+
+  downloadBtn.addEventListener("click", function () {
+    var blob = new Blob([editor.value], { type: "text/markdown;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "我的笔记.md";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  /* ---------- 移动端：编辑/预览 Tab 切换 ---------- */
+  var mobileTabs = document.getElementById("mobileTabs");
+  var editorWrap = document.getElementById("editorWrap");
+  var previewWrap = document.getElementById("previewWrap");
+
+  mobileTabs.querySelectorAll(".tab").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      mobileTabs.querySelectorAll(".tab").forEach(function (t) { t.classList.remove("active"); });
+      tab.classList.add("active");
+      if (tab.getAttribute("data-tab") === "editor") {
+        editorWrap.classList.remove("hidden-tab");
+        previewWrap.classList.add("hidden-tab");
+      } else {
+        previewWrap.classList.remove("hidden-tab");
+        editorWrap.classList.add("hidden-tab");
+      }
+    });
+  });
+
+  /* ---------- 移动端：语法速查抽屉 ---------- */
+  var drawerBtn = document.getElementById("drawerBtn");
+  var drawerMask = document.getElementById("drawerMask");
+  var sidebar = document.querySelector("aside");
+
+  function openDrawer() {
+    sidebar.classList.add("drawer-open");
+    drawerMask.classList.add("show");
+  }
+  function closeDrawer() {
+    sidebar.classList.remove("drawer-open");
+    drawerMask.classList.remove("show");
+  }
+
+  drawerBtn.addEventListener("click", openDrawer);
+  drawerMask.addEventListener("click", closeDrawer);
+
+  /* ---------- 对照学习模式 ---------- */
+  var learnModal = document.getElementById("learnModal");
+  var learnTitle = document.getElementById("learnTitle");
+  var learnSource = document.getElementById("learnSource");
+  var learnPreview = document.getElementById("learnPreview");
+  var learnTip = document.getElementById("learnTip");
+  var learnInsertBtn = document.getElementById("learnInsert");
+  var learnCloseBtn = document.getElementById("learnClose");
+  var currentLearn = null;
+
+  function openLearn(card) {
+    currentLearn = card;
+    learnTitle.textContent = "📖 对照学习：" + card.name;
+    learnSource.innerHTML = "";
+    card.learn.forEach(function (item, i) {
+      var line = document.createElement("div");
+      line.className = "learn-line";
+
+      var ln = document.createElement("span");
+      ln.className = "ln";
+      ln.textContent = i + 1;
+
+      var code = document.createElement("code");
+      code.className = "lcode";
+      code.textContent = item.line === "" ? "␣" : item.line;
+
+      var note = document.createElement("span");
+      note.className = "lnote";
+      note.textContent = "← " + item.note;
+
+      line.appendChild(ln);
+      line.appendChild(code);
+      line.appendChild(note);
+      learnSource.appendChild(line);
+    });
+
+    learnPreview.innerHTML = md.render(card.learn.map(function (x) { return x.line; }).join("\n"));
+    learnPreview.querySelectorAll("pre code").forEach(function (el) { hljs.highlightElement(el); });
+    learnTip.textContent = "左侧每一行都会实时渲染成右侧效果，注意对照写法。";
+    learnModal.hidden = false;
+  }
+
+  function closeLearn() { learnModal.hidden = true; }
+
+  learnCloseBtn.addEventListener("click", closeLearn);
+  learnModal.addEventListener("click", function (e) { if (e.target === learnModal) closeLearn(); });
+
+  /* ---------- 练习挑战 ---------- */
+  var LEVELS = [
+    { name: "第一关 · 基础语法", emoji: "🌱", sub: "标题 / 加粗 / 斜体 / 删除线", pick: 5, quests: [
+      { q: "想生成「一级标题」，下面哪个写法正确？", opts: ["# 标题", "## 标题", "### 标题", "标题 #"], ans: 0, why: "# 的个数决定标题级别：1 个 # 是一级标题（最大），2 个是二级，最多 6 个。" },
+      { q: "想生成「二级标题」，下面哪个写法正确？", opts: ["## 标题", "# 标题", "### 标题", "标题##"], ans: 0, why: "2 个 # 就是二级标题，字号比一级小一点。" },
+      { q: "Markdown 的标题最多支持几级？", opts: ["3 级", "4 级", "6 级", "不限"], ans: 2, why: "从 # 到 ###### 共 6 级，6 个 # 是最小的标题。" },
+      { q: "想强调「重点」两个字并显示为加粗，应该写？", opts: ["*重点*", "**重点**", "~~重点~~", "重点**"], ans: 1, why: "两个 * 包裹 = 加粗；一个 * 是斜体；两个 ~ 是删除线。" },
+      { q: "下面哪项能让文字显示为「斜体」？", opts: ["**斜体**", "*斜体*", "~~斜体~~", "斜体*"], ans: 1, why: "一个 * 包裹就是斜体，轻量强调。" },
+      { q: "「删除线」效果（文字中间划一条线）用哪组符号？", opts: ["~文字~", "~~文字~~", "---文字---", "--文字--"], ans: 1, why: "两个波浪线 ~~ 包裹文字 = 删除线。" },
+      { q: "想让一段文字「又粗又斜」，下面哪个是对的？", opts: ["**文字*", "*文字**", "***文字***", "~~~文字~~~"], ans: 2, why: "三个 * 包裹 = 加粗 + 斜体同时生效。" },
+      { q: "除了 *，下面哪个符号也能用来做加粗/斜体？", opts: ["_", "-", "~", "+"], ans: 0, why: "* 和 _ 都是强调符号，__文字__ 也能加粗。" },
+      { q: "想让两段文字变成两个段落（中间留出间距），应该？", opts: ["两段之间空一行", "直接按一次回车", "每段开头加空格", "每段结尾加 ---"], ans: 0, why: "Markdown 里空一行才是新段落；只按一次回车会被当成同一段。" },
+      { q: "下面哪个写法能同时加粗和斜体？", opts: ["___文字___", "__文字__", "_文字_", "~~文字~~"], ans: 0, why: "三个强调符（* 或 _ 都行）包裹 = 加粗 + 斜体。" }
+    ] },
+    { name: "第二关 · 列表与引用", emoji: "📋", sub: "无序 / 有序列表、任务清单、引用", pick: 5, quests: [
+      { q: "「无序列表」每个列表项的行首应该用什么符号？", opts: ["1.", "-", "#", ">"], ans: 1, why: "-（或 *、+）加空格 = 无序列表项；1. 是有序列表；# 是标题；> 是引用。" },
+      { q: "无序列表除了 -，还能用哪些符号开头？", opts: ["* 和 +", ". 和 ,", "# 和 @", "> 和 |"], ans: 0, why: "-、*、+ 都能做无序列表符号，效果完全一样。" },
+      { q: "有序列表你写了 1、2、5，渲染出来会怎样？", opts: ["显示 1、2、5", "自动变成 1、2、3", "第 5 行渲染失败", "整段失效"], ans: 1, why: "数字不重要，Markdown 会自动重新编号，放心写。" },
+      { q: "有序列表从 3. 开始写，渲染出来会？", opts: ["从 3 开始编号", "强制从 1 开始", "不显示数字", "报错"], ans: 0, why: "列表会从你写的第一个数字开始编号，所以写 3. 就从 3 开始。" },
+      { q: "任务清单里，「已完成」的方框标记是？", opts: ["[x]", "[ ]", "[v]", "[*]"], ans: 0, why: "[x] 是已勾选，[ ]（中间空格）是未完成。" },
+      { q: "任务清单最适合用来写什么？", opts: ["待办事项", "文章标题", "代码片段", "图片说明"], ans: 0, why: "[x] / [ ] 的勾选框就是为待办清单设计的。" },
+      { q: "想引用一段话，行首应该加什么？", opts: ["|", "@", ">", "&"], ans: 2, why: "> 加空格 = 引用块，多行引用每行都要加 >。" },
+      { q: "引用块可以嵌套吗（引用里再套引用）？", opts: ["可以，用 >>", "不可以", "只能嵌套一次", "会报错"], ans: 0, why: ">> 就是引用里的引用，多级引用就用多个 >。" },
+      { q: "引用块里要分成两段，空行那一行也要写什么？", opts: [">", "空格", "什么都不用写", "---"], ans: 0, why: "引用里的空行也要写 >，段落才不会断开。" },
+      { q: "在无序列表里做「子列表」（嵌套），应该怎么做？", opts: ["换个符号", "前面缩进两个空格", "加大写字母", "列表不能嵌套"], ans: 1, why: "在列表项下一行缩进 2 格再写 - 就是嵌套子列表。" }
+    ] },
+    { name: "第三关 · 进阶语法", emoji: "🚀", sub: "链接、图片、代码、表格、分割线、转义", pick: 5, quests: [
+      { q: "创建链接的正确写法是？", opts: ["(文字)[网址]", "[文字](网址)", "[网址](文字)", "<文字><网址>"], ans: 1, why: "方括号 = 显示的文字，圆括号 = 点击跳转的网址。" },
+      { q: "「插入图片」和「链接」写法最关键的区别是？", opts: ["图片多一个感叹号 !", "图片用圆括号", "图片用尖括号", "没有区别"], ans: 0, why: "图片在链接写法前多加一个 !，即 ![描述](地址)。" },
+      { q: "图片地址加载失败时，页面会显示？", opts: ["方括号里的描述文字", "红色报错", "一片空白", "网址本身"], ans: 0, why: "![描述](地址) 中「描述」就是加载失败时显示的替代文字。" },
+      { q: "想在句子里嵌入一小段代码（行内代码），用什么符号包裹？", opts: ["单引号 '", "双引号 \"", "反引号 `", "括号 ()"], ans: 2, why: "反引号 ` 包裹 = 行内代码，会以等宽字体显示。" },
+      { q: "多行代码块用什么开头和结尾？", opts: ["三个单引号", "三个反引号 ```", "三个 #", "三个 ---"], ans: 1, why: "三个反引号 ``` 包裹多行代码；开头可加语言名（如 ```python）实现高亮。" },
+      { q: "```python 里的 python 是做什么的？", opts: ["触发 Python 语法高亮", "给代码起名字", "没有作用", "指定字体"], ans: 0, why: "代码块开头指定语言，渲染时就用对应语言的彩色高亮。" },
+      { q: "行内代码和代码块的主要区别是？", opts: ["代码块可多行、可高亮", "没有区别", "代码块不能加语言", "行内代码更美观"], ans: 0, why: "行内代码适合句子里的小片段；代码块适合多行代码，还能语法高亮。" },
+      { q: "画表格时，第二行必须写什么表格才能生效？", opts: ["什么都不用写", "--- 分隔线", "=== 分隔线", "*** 分隔线"], ans: 1, why: "第二行的 | --- | --- | 是表头分隔线，没有它表格无法渲染。" },
+      { q: "「分割线」是单独一行写几个以上的 - ？", opts: ["1 个", "2 个", "3 个", "5 个"], ans: 2, why: "单独一行写 3 个以上 -（或 *、_）就是分割线。" },
+      { q: "想把 * 显示成普通符号（不触发斜体），前面加什么？", opts: ["反斜杠 \\", "斜杠 /", "下划线 _", "空格"], ans: 0, why: "反斜杠 \\ 是转义符，让 Markdown 特殊符号显示为普通字符。" }
+    ] }
+  ];
+
+  var chalModal = document.getElementById("chalModal");
+  var chalArea = document.getElementById("chalArea");
+  var chalInfo = document.getElementById("chalInfo");
+  var chalAction = document.getElementById("chalAction");
+  var chalCloseBtn = document.getElementById("chalClose");
+  var chalBtn = document.getElementById("chalBtn");
+
+  var chal = { mode: "menu", level: 0, qi: 0, score: 0, sel: null, answered: false, finished: false, rounds: [] };
+
+  function totalQuests() {
+    var n = 0;
+    LEVELS.forEach(function (l) { n += l.quests.length; });
+    return n;
+  }
+
+  function roundSize() {
+    var n = 0;
+    chal.rounds.forEach(function (qs) { n += qs.length; });
+    return n;
+  }
+
+  // Fisher-Yates 洗牌后取前 n 题（每轮不重复）
+  function pickQuests(quests, n) {
+    var arr = quests.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr.slice(0, Math.min(n, arr.length));
+  }
+
+  function startRound(mode, levelIndex) {
+    chal.mode = mode;
+    chal.level = levelIndex;
+    chal.qi = 0;
+    chal.score = 0;
+    chal.sel = null;
+    chal.answered = false;
+    chal.finished = false;
+    chal.rounds = LEVELS.map(function (lv) { return pickQuests(lv.quests, lv.pick); });
+    renderChallenge();
+  }
+
+  function openChallenge() {
+    chal = { mode: "menu", level: 0, qi: 0, score: 0, sel: null, answered: false, finished: false, rounds: [] };
+    chalModal.hidden = false;
+    renderChallenge();
+  }
+
+  function closeChallenge() { chalModal.hidden = true; }
+
+  function renderChallenge() {
+    if (chal.mode === "menu") { renderMenu(); return; }
+    if (chal.finished) { renderResult(); return; }
+
+    var level = LEVELS[chal.level];
+    var quests = chal.rounds[chal.level];
+    var quest = quests[chal.qi];
+    var levelTotal = quests.length;
+    var roundTotal = chal.mode === "full" ? roundSize() : levelTotal;
+    var done, num;
+    if (chal.mode === "full") {
+      done = 0;
+      chal.rounds.forEach(function (qs, i) { if (i < chal.level) done += qs.length; });
+      done += chal.qi;
+      num = done + 1;
+    } else {
+      done = chal.qi;
+      num = chal.qi + 1;
+    }
+
+    document.getElementById("chalTitle").textContent = "🎯 练习挑战" + (chal.mode === "full" ? " · 完整挑战" : " · " + level.emoji + " " + level.name);
+    chalInfo.textContent = "答对：" + chal.score + " / 已答 " + done + " 题";
+
+    var html = "";
+    html += "<div class=\"chal-progress\"><div class=\"bar\" style=\"width:" + Math.round(done / roundTotal * 100) + "%\"></div></div>";
+    html += "<div class=\"chal-level\">" + level.emoji + " " + level.name + " · 第 " + num + " / " + roundTotal + " 题（本轮随机抽题）</div>";
+    html += "<div class=\"chal-quest\">" + num + ". " + quest.q + "</div>";
+    html += "<div class=\"chal-options\">";
+    var letters = ["A", "B", "C", "D"];
+    quest.opts.forEach(function (opt, i) {
+      var cls = "chal-option";
+      if (chal.answered) {
+        if (i === quest.ans) cls += " correct";
+        else if (i === chal.sel) cls += " wrong";
+      } else if (i === chal.sel) {
+        cls += " selected";
+      }
+      html += "<button class=\"" + cls + "\" data-i=\"" + i + "\"" + (chal.answered ? " disabled" : "") + ">";
+      html += "<span class=\"opt-letter\">" + letters[i] + "</span>" + escapeHtml(opt) + "</button>";
+    });
+    html += "</div>";
+
+    if (chal.answered) {
+      var ok = chal.sel === quest.ans;
+      html += "<div class=\"chal-feedback " + (ok ? "ok" : "bad") + "\">";
+      html += (ok ? "✅ 答对了！" : "❌ 答错了") + " 正确答案是 <b>" + letters[quest.ans] + "</b>。";
+      html += "<span class=\"why\">💡 " + escapeHtml(quest.why) + "</span></div>";
+    }
+
+    chalArea.innerHTML = html;
+
+    chalArea.querySelectorAll(".chal-option").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (chal.answered) return;
+        chal.sel = parseInt(btn.getAttribute("data-i"), 10);
+        renderChallenge();
+      });
+    });
+
+    // 底部按钮状态
+    if (chal.answered) {
+      var isLast = chal.mode === "full"
+        ? (chal.level === LEVELS.length - 1 && chal.qi === levelTotal - 1)
+        : (chal.qi === levelTotal - 1);
+      chalAction.textContent = isLast ? "查看成绩 🏁" : "下一题 →";
+      chalAction.disabled = false;
+    } else {
+      chalAction.textContent = "确认答案";
+      chalAction.disabled = chal.sel === null;
+    }
+  }
+
+  function renderMenu() {
+    document.getElementById("chalTitle").textContent = "🎯 练习挑战";
+    chalInfo.textContent = "题库共 " + totalQuests() + " 题 · 每轮随机抽";
+    chalAction.textContent = "🏁 完整挑战（每关随机 " + LEVELS[0].pick + " 题）";
+    chalAction.disabled = false;
+
+    var html = "<div class=\"chal-menu\"><p class=\"chal-menu-tip\">选一个关卡开始，或直接完整挑战。每轮题目都从题库随机抽取：</p>";
+    LEVELS.forEach(function (lv, i) {
+      html += "<button class=\"chal-menu-card\" data-level=\"" + i + "\">" +
+        "<span class=\"emoji\">" + lv.emoji + "</span>" +
+        "<span class=\"info\"><span class=\"name\">第 " + (i + 1) + " 关 · " + lv.name + "</span>" +
+        "<span class=\"sub\">" + lv.sub + " · 题库 " + lv.quests.length + " 题，随机抽 " + lv.pick + " 题</span></span>" +
+        "<span class=\"arrow\">→</span></button>";
+    });
+    html += "</div>";
+    chalArea.innerHTML = html;
+
+    chalArea.querySelectorAll(".chal-menu-card").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        startRound("level", parseInt(btn.getAttribute("data-level"), 10));
+      });
+    });
+  }
+
+  function renderResult() {
+    // 单关模式按本关抽出的题数计，完整模式按整轮题数计
+    var roundTotal = chal.mode === "full" ? roundSize() : chal.rounds[chal.level].length;
+    var pct = Math.round(chal.score / roundTotal * 100);
+    var emoji, comment, stars;
+    if (pct === 100) { emoji = "🏆"; stars = "⭐⭐⭐"; comment = "满分！所有语法都掌握了，可以去写你的第一篇文章了！"; }
+    else if (pct >= 85) { emoji = "🌟"; stars = "⭐⭐"; comment = "非常棒！只差一点点，复习一下错题对应的语法卡片吧。"; }
+    else if (pct >= 60) { emoji = "👍"; stars = "⭐"; comment = "不错！建议回到左侧语法速查，用「📖 学习」模式巩固一下。"; }
+    else { emoji = "📚"; stars = ""; comment = "别灰心！从「🌱 入门示例」开始，配合语法卡片的对照学习，再来一轮。"; }
+
+    document.getElementById("chalTitle").textContent = "🎯 成绩单";
+    chalInfo.textContent = "";
+    chalAction.textContent = "返回选关 🔄";
+    chalAction.disabled = false;
+
+    chalArea.innerHTML =
+      "<div class=\"chal-result\">" +
+      "<div class=\"big\">" + emoji + "</div>" +
+      "<div class=\"score\">" + chal.score + " / " + roundTotal + "</div>" +
+      "<div class=\"chal-stars\">" + stars + "</div>" +
+      "<div class=\"comment\">" + comment + "</div>" +
+      "</div>";
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  chalAction.addEventListener("click", function () {
+    if (chal.mode === "menu") {
+      startRound("full", 0);
+      return;
+    }
+    if (chal.finished) { openChallenge(); return; }
+    if (!chal.answered) {
+      // 确认答案
+      chal.answered = true;
+      var quest = chal.rounds[chal.level][chal.qi];
+      if (chal.sel === quest.ans) chal.score++;
+      renderChallenge();
+      return;
+    }
+    // 下一题 / 下一关 / 完成
+    var quests = chal.rounds[chal.level];
+    if (chal.qi < quests.length - 1) {
+      chal.qi++;
+    } else if (chal.mode === "full" && chal.level < LEVELS.length - 1) {
+      chal.level++;
+      chal.qi = 0;
+    } else {
+      chal.finished = true;
+    }
+    chal.sel = null;
+    chal.answered = false;
+    renderChallenge();
+  });
+
+  chalCloseBtn.addEventListener("click", closeChallenge);
+  chalModal.addEventListener("click", function (e) { if (e.target === chalModal) closeChallenge(); });
+  chalBtn.addEventListener("click", openChallenge);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (!learnModal.hidden) closeLearn();
+    if (!chalModal.hidden) closeChallenge();
+    closeDrawer();
+  });
+
+  learnInsertBtn.addEventListener("click", function () {
+    if (!currentLearn) return;
+    insertAtCursor(editor, currentLearn.code + "\n\n");
+    closeLearn();
+    render();
+  });
+
+  /* ---------- 启动 ---------- */
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  editor.value = saved !== null && saved !== "" ? saved : EXAMPLES.beginner;
+  render();
+})();
+</script>
+</body>
+</html>
