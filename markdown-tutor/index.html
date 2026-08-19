@@ -433,7 +433,7 @@
     header h1 { font-size: 14px; }
     header h1 .logo { width: 20px; height: 20px; vertical-align: -4px; }
     .btn { padding: 5px 9px; font-size: 12px; }
-    .desktop-only, .full { display: none; }
+    .badge, .desktop-only, .full { display: none; }
     .mobile-only { display: inline-block; }
     /* 操作按钮组独立成一行，flex 均分自适应，窄屏也不换行 */
     .toolbar {
@@ -473,7 +473,6 @@
 <header>
   <h1><svg class="logo" viewBox="0 0 100 100" width="25" height="25" aria-hidden="true"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com/license/free (Icons: CC BY 4.0) Copyright 2024 Fonticons, Inc. --><g transform="translate(0 10) scale(0.15625)"><path fill="#2f6feb" d="M593.8 59.1H46.2C20.7 59.1 0 79.8 0 105.2v301.5c0 25.5 20.7 46.2 46.2 46.2h547.7c25.5 0 46.2-20.7 46.1-46.1V105.2c0-25.4-20.7-46.1-46.2-46.1zM338.5 360.6H277v-120l-61.5 76.9-61.5-76.9v120H92.3V151.4h61.5l61.5 76.9 61.5-76.9h61.5v209.2zm135.3 3.1L381.5 256H443V151.4h61.5V256H566z"/></g></svg>Markdown <span>学习工坊</span></h1>
   <span class="badge desktop-only">100% 本地 · 无需联网</span>
-  <span class="badge mobile-only">本地 · 离线</span>
   <span class="spacer"></span>
   <div class="toolbar">
     <button id="drawerBtn" class="btn mobile-only" title="语法速查">📖<span class="full"> 语法</span></button>
