@@ -429,7 +429,9 @@
     #previewWrap.hidden-tab, #editorWrap.hidden-tab { display: none; }
 
     /* 顶栏精简 */
-    header { padding: calc(8px + var(--safe-area-inset-top, env(safe-area-inset-top, 0px))) 10px 8px; gap: 6px; }
+    header { padding: calc(14px + var(--safe-area-inset-top, env(safe-area-inset-top, 0px))) 10px 8px; gap: 6px; }
+    header h1 { margin: 0 auto; } /* 移动端标题居中 */
+    .spacer { display: none; } /* 桌面弹性占位隐藏，释放空间给标题居中 */
     header h1 { font-size: 14px; }
     header h1 .logo { width: 20px; height: 20px; vertical-align: -4px; }
     .btn { padding: 5px 9px; font-size: 12px; }
