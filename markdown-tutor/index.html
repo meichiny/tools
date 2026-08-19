@@ -451,11 +451,11 @@
     }
     #exampleSelect { width: 112px; max-width: none; }
     .pane-head { font-size: 11px; padding: 6px 10px; }
-    footer { font-size: 11px; padding: 5px 10px; padding-bottom: calc(5px + env(safe-area-inset-bottom)); }
-    /* 移动端页脚两行：状态一行 + 作者一行，更清爽 */
-    footer #saveHint { flex: 1 1 auto; }
+    footer { font-size: 11px; padding: 5px 10px; padding-bottom: calc(5px + env(safe-area-inset-bottom)); gap: 4px; }
+    /* 移动端页脚单行：状态+字数在左，作者在右，间距收紧 */
+    footer #saveHint { flex: 0 0 auto; }
     footer #charCount { flex: 0 0 auto; }
-    footer .author { flex-basis: 100%; text-align: right; margin-left: 0; }
+    footer .author { margin-left: auto; }
   }
 
   /* 弹窗窄屏单列（学习对照） */
