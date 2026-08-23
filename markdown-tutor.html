@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown 学习工坊</title>
+    <style>
+        body { font-family: -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; max-width: 760px; margin: 40px auto; padding: 0 20px; background: #f0f2f5; line-height: 1.6; color: #1a1a1a; }
+        .card { background: white; padding: 32px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        .logo { width: 56px; height: 56px; border-radius: 12px; box-shadow: 0 2px 8px rgba(47,111,235,0.25); }
+        h1 { font-size: 24px; margin: 16px 0 6px; color: #1a1a1a; }
+        .tag { display: inline-block; background: #e8f0fe; color: #2f6feb; padding: 3px 10px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+        .desc { color: #444; margin: 14px 0 4px; }
+        .features { list-style: none; padding: 0; margin: 18px 0 24px; }
+        .features li { padding: 5px 0; color: #333; }
+        .features li::before { content: "✅ "; }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .btn { display: inline-block; background: #2f6feb; color: #fff !important; text-decoration: none; padding: 12px 32px; border-radius: 8px; font-weight: 600; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn-ghost { background: #f0f2f5; color: #555 !important; }
+        .btn-ghost:hover { background: #e2e6ea; opacity: 1; }
+        .hint { font-size: 13px; color: #888; margin-top: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="card" style="text-align: center;">
+    <img class="logo" src="markdown-tutor/favicon.svg" alt="Markdown 学习工坊">
+    <h1>Markdown 学习工坊</h1>
+    <span class="tag">100% 本地 · 无需联网</span>
+    <p class="desc">边学边练的 Markdown 入门工具：左边写、右边看实时预览，点语法卡片可逐行对照学习，再用闯关挑战检验成果。</p>
+    <ul class="features">
+        <li>实时预览：左侧编辑、右侧渲染，所见即所得</li>
+        <li>语法卡片：点击即可插入，支持「📖 学习」逐行对照</li>
+        <li>闯关挑战：选择题随堂测验，学完立刻检验</li>
+        <li>自动保存：内容存于本地浏览器，不传数据</li>
+    </ul>
+    <div class="actions" style="justify-content: center;">
+        <a class="btn" href="markdown-tutor/index.html">进入 Markdown 学习工坊 →</a>
+        <a class="btn btn-ghost" href="index.html">返回工具箱首页</a>
+    </div>
+    <p class="hint">打开后建议先用「入门示例」练手，再逐卡学习、闯关巩固。</p>
+</div>
+
+<script src="footer.js"></script>
+</body>
+</html>
