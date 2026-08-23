@@ -271,6 +271,17 @@
   }
   #saveHint { color: #22863a; }
   .author { margin-left: auto; }
+  .footer-links {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+  }
+  .footer-links a {
+    color: var(--accent);
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  .footer-links a:hover { text-decoration: underline; }
   .kbd {
     background: var(--code-bg);
     border: 1px solid var(--border);
@@ -524,7 +535,12 @@
   <footer>
   <span id="saveHint">💾 自动保存到本地浏览器</span>
   <span id="charCount">0 字</span>
-  <span class="author">© 2026 bengdadai</span>
+  <span class="author">© 2026 我的工具箱</span>
+  <div class="footer-links">
+    <a href="/tools/">首页</a>
+    <a href="https://github.com/meichiny/tools">GitHub 源码</a>
+    <a href="https://github.com/meichiny/tools/issues">反馈建议</a>
+  </div>
 </footer>
 
 <!-- 移动端抽屉遮罩 -->
