@@ -66,8 +66,9 @@
 
   /* ===== 头部 ===== */
   header { text-align: left; margin: 0 14px 18px 222px; }
-  .logo-big { font-size: 52px; line-height: 1.2; }
-  .title-main { font-size: 30px; font-weight: 800; letter-spacing: 1px; margin-top: 4px; }
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .logo-big { font-size: 36px; line-height: 1; }
+  .title-main { font-size: 30px; font-weight: 800; letter-spacing: 1px; margin: 0; }
   .title-sub { color: var(--muted); font-size: 15px; margin-top: 6px; }
   .meta-row { display: flex; justify-content: flex-start; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .meta-chip {
@@ -253,8 +254,10 @@
 <body>
 <div id="app">
   <header>
-    <div class="logo-big">📥</div>
-    <h1 class="title-main">yt-dlp 工具集</h1>
+    <div class="header-title">
+      <div class="logo-big">📥</div>
+      <h1 class="title-main">yt-dlp 工具集</h1>
+    </div>
     <p class="title-sub" id="subtitle">基于 yt-dlp 的视频下载工具清单</p>
     <div class="meta-row">
       <span class="meta-chip green" id="chip-updated">数据更新于 —</span>
