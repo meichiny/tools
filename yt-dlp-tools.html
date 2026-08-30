@@ -92,14 +92,14 @@
   }
 
   /* ===== 布局：侧边栏 + 内容 ===== */
-  .layout { display: flex; gap: 40px; align-items: flex-start; padding-left: 186px; }
-  main.content { flex: 1; min-width: 0; }
+  .layout { display: block; }
+  main.content { margin-left: 222px; margin-right: 14px; max-width: 960px; }
 
   /* ===== 分类导航（桌面：左侧栏）===== */
   nav.catnav {
     position: fixed;
     left: 14px;
-    top: 14px;
+    top: 200px;
     width: 168px;
     flex-shrink: 0;
     display: flex;
@@ -133,6 +133,7 @@
   /* 移动端：分类导航变顶部换行 chips */
   @media (max-width: 899px) {
     .layout { flex-direction: column; gap: 0; padding-left: 0; }
+    main.content { margin-left: 0; margin-right: 0; max-width: none; }
     nav.catnav {
       position: static;
       width: auto;
@@ -260,13 +261,13 @@
     </div>
     <p class="criteria" id="criteria">收录标准：以 yt-dlp 为下载后端、仍在活跃维护、star ≥ 50 或功能独特</p>
   </header>
+</div>
 
-  <div class="layout">
-    <nav class="catnav" id="catnav"></nav>
-    <main class="content" id="content">
-      <div class="status-box">⏳ 正在加载工具清单…</div>
-    </main>
-  </div>
+<div class="layout">
+  <nav class="catnav" id="catnav"></nav>
+  <main class="content" id="content">
+    <div class="status-box">⏳ 正在加载工具清单…</div>
+  </main>
 </div>
 
 <button id="theme-btn" class="floating-btn theme-btn" type="button" aria-label="切换浅色/深色模式" title="浅色 / 深色">🌙</button>
@@ -296,6 +297,18 @@
     if (topBtn) topBtn.classList.toggle('show', (window.scrollY || 0) > 400);
   }, { passive: true });
   if (topBtn) topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ===== 侧边栏定位（桌面端：贴左 + 与首个分类标题对齐）=====
+  function positionNav() {
+    const nav = document.getElementById('catnav');
+    const hd = document.querySelector('header');
+    if (window.innerWidth >= 900 && hd && nav) {
+      nav.style.top = (hd.offsetHeight + 4) + 'px';
+    }
+  }
+  window.addEventListener('resize', positionNav);
+  window.addEventListener('load', positionNav);
+  positionNav();
 
   function fmtStars(n) {
     if (n == null) return '—';
