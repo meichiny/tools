@@ -62,14 +62,14 @@
     line-height: 1.6;
     padding: calc(14px + env(safe-area-inset-top, 0px)) 14px calc(24px + env(safe-area-inset-bottom, 0px));
   }
-  #app { max-width: 1100px; margin: 0 auto; }
+  #app { max-width: none; }
 
   /* ===== 头部 ===== */
-  header { text-align: center; margin-bottom: 18px; }
+  header { text-align: left; margin: 0 14px 18px 222px; }
   .logo-big { font-size: 52px; line-height: 1.2; }
   .title-main { font-size: 30px; font-weight: 800; letter-spacing: 1px; margin-top: 4px; }
   .title-sub { color: var(--muted); font-size: 15px; margin-top: 6px; }
-  .meta-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .meta-row { display: flex; justify-content: flex-start; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .meta-chip {
     background: var(--card);
     border: 2.5px solid var(--border);
@@ -81,7 +81,7 @@
   }
   .meta-chip.green { background: var(--green-soft); color: var(--criteria-text); }
   .criteria {
-    margin: 14px auto 0;
+    margin: 14px 0 0;
     max-width: 620px;
     background: var(--green-soft);
     border: 2px solid var(--border);
@@ -132,6 +132,7 @@
 
   /* 移动端：分类导航变顶部换行 chips */
   @media (max-width: 899px) {
+    header { margin-left: 14px; margin-right: 14px; }
     .layout { flex-direction: column; gap: 0; padding-left: 0; }
     main.content { margin-left: 0; margin-right: 0; max-width: none; }
     nav.catnav {
