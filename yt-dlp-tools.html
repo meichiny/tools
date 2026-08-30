@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>yt-dlp 工具集｜基于 yt-dlp 的视频下载工具</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20x%3D%225%22%20y%3D%221.5em%22%20font-size%3D%2245%22%3E%F0%9F%93%A5%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>
+  :root {
+    --bg: #f6f1e7;
+    --card: #ffffff;
+    --ink: #2b2b2b;
+    --muted: #7a7265;
+    --border: #2b2b2b;
+    --shadow: 5px 5px 0 rgba(43,43,43,.14);
+    --green: #07c160;
+    --green-soft: #e2f9ec;
+    --blue: #4a7dff;
+    --blue-soft: #e3ecff;
+    --orange: #ff9f43;
+    --orange-soft: #fff0dd;
+    --red: #ff6b6b;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 14px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  #app { max-width: 860px; margin: 0 auto; }
+
+  /* ===== 头部 ===== */
+  header { text-align: center; margin-bottom: 18px; }
+  .logo-big { font-size: 52px; line-height: 1.2; }
+  .title-main { font-size: 30px; font-weight: 800; letter-spacing: 1px; margin-top: 4px; }
+  .title-sub { color: var(--muted); font-size: 15px; margin-top: 6px; }
+  .meta-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .meta-chip {
+    background: var(--card);
+    border: 2.5px solid var(--border);
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 rgba(43,43,43,.14);
+    padding: 4px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .meta-chip.green { background: var(--green-soft); color: #058a4c; }
+  .criteria {
+    margin: 14px auto 0;
+    max-width: 620px;
+    background: var(--green-soft);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: #3d5a4d;
+  }
+
+  /* ===== 分类导航 ===== */
+  nav.catnav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 2px 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 4px;
+  }
+  nav.catnav::-webkit-scrollbar { display: none; }
+  .catnav a {
+    flex: 0 0 auto;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--card);
+    border: 2.5px solid var(--border);
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 rgba(43,43,43,.14);
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .catnav a:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(43,43,43,.14); }
+
+  /* ===== 分类区块 ===== */
+  section.cat { margin-top: 22px; }
+  .cat-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .cat-icon { font-size: 26px; }
+  .cat-name { font-size: 21px; font-weight: 800; letter-spacing: .5px; }
+  .cat-hint { color: var(--muted); font-size: 13px; }
+  .cat-count { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--muted); background: var(--card); border: 2px solid var(--border); border-radius: 999px; padding: 2px 10px; box-shadow: 2px 2px 0 rgba(43,43,43,.12); }
+
+  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  /* ===== 工具卡片 ===== */
+  .tool {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: pop .3s ease;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .tool-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .tool-name { font-size: 17px; font-weight: 800; color: var(--ink); text-decoration: none; border-bottom: 2px solid transparent; }
+  .tool-name:hover { border-bottom-color: var(--green); }
+  .tool-name::after { content: " ↗"; font-size: 13px; color: var(--green); }
+  .tool-repo {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1.5px solid #d8d0bf;
+    border-radius: 8px;
+    padding: 1px 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    word-break: break-all;
+  }
+  .tool-desc { font-size: 14px; color: #4a463e; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge {
+    font-size: 12px;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 1px 8px;
+    background: #fff;
+  }
+  .badge.plat { background: var(--blue-soft); }
+  .badge.ui { background: var(--orange-soft); }
+  .tool-meta {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-top: 1.5px dashed #ddd5c4;
+    padding-top: 8px;
+  }
+  .tool-meta b { color: var(--ink); }
+  .star { color: #b8860b; font-weight: 700; }
+
+  /* ===== 加载/错误 ===== */
+  .status-box {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .status-box.error { color: var(--red); }
+
+  /* ===== 页脚 ===== */
+  footer { margin-top: 50px; padding: 20px; border-top: 1px solid #ddd; text-align: center; font-size: 14px; color: #666; }
+  footer a { color: #07c160; text-decoration: none; margin: 0 10px; }
+  footer a:hover { text-decoration: underline; }
+  .footer-links { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo-big">📥</div>
+    <h1 class="title-main">yt-dlp 工具集</h1>
+    <p class="title-sub" id="subtitle">基于 yt-dlp 的视频下载工具清单</p>
+    <div class="meta-row">
+      <span class="meta-chip green" id="chip-updated">数据更新于 —</span>
+      <span class="meta-chip" id="chip-total">共 — 个工具</span>
+    </div>
+    <p class="criteria" id="criteria">收录标准：以 yt-dlp 为下载后端、仍在活跃维护、star ≥ 50 或功能独特</p>
+  </header>
+
+  <nav class="catnav" id="catnav"></nav>
+
+  <div id="content">
+    <div class="status-box">⏳ 正在加载工具清单…</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const PLATFORM = { windows: '🪟 Windows', macos: '🍎 macOS', linux: '🐧 Linux', android: '🤖 Android' };
+  const UI = { cli: '⌨️ 命令行', gui: '🖥️ 图形界面', web: '🌐 Web 界面' };
+
+  function fmtStars(n) {
+    if (n == null) return '—';
+    if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + ' 万';
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return String(n);
+  }
+
+  function fmtDate(s) {
+    if (!s) return '—';
+    const d = new Date(s.length === 10 ? s + 'T00:00:00Z' : s);
+    if (isNaN(d)) return s;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function render(data) {
+    const m = data.meta || {};
+    document.title = (m.title || 'yt-dlp 工具集') + '｜基于 yt-dlp 的视频下载工具';
+    if (m.subtitle) document.getElementById('subtitle').textContent = m.subtitle;
+    document.getElementById('chip-updated').textContent = '数据更新于 ' + fmtDate(m.updatedAt);
+    const cats = data.categories || [];
+    const total = cats.reduce((s, c) => s + (c.tools ? c.tools.length : 0), 0);
+    document.getElementById('chip-total').textContent = '共 ' + total + ' 个工具';
+    if (m.criteria) document.getElementById('criteria').textContent = m.criteria;
+
+    // 分类导航
+    const nav = document.getElementById('catnav');
+    nav.innerHTML = cats.map((c, i) =>
+      `<a href="#cat-${c.id}">${c.icon || ''} ${c.name}</a>`
+    ).join('');
+
+    // 分类区块
+    const content = document.getElementById('content');
+    content.innerHTML = cats.map((c, i) => `
+      <section class="cat" id="cat-${c.id}">
+        <div class="cat-head">
+          <span class="cat-icon">${c.icon || '📦'}</span>
+          <span class="cat-name">${c.name}</span>
+          <span class="cat-hint">${c.hint || ''}</span>
+          <span class="cat-count">${c.tools.length} 个</span>
+        </div>
+        <div class="grid">
+          ${c.tools.map(toolCard).join('')}
+        </div>
+      </section>
+    `).join('');
+  }
+
+  function toolCard(t) {
+    const plats = (t.platforms || []).map(p => PLATFORM[p] ? `<span class="badge plat">${PLATFORM[p]}</span>` : '').join('');
+    const ui = UI[t.ui] ? `<span class="badge ui">${UI[t.ui]}</span>` : '';
+    const lang = t.lang ? `<span class="badge">${t.lang}</span>` : '';
+    const lic = t.license ? `<span class="badge">${t.license}</span>` : '';
+    return `
+      <article class="tool">
+        <div class="tool-top">
+          <a class="tool-name" href="https://github.com/${t.repo}" target="_blank" rel="noopener">${t.name}</a>
+          <span class="tool-repo">${t.repo}</span>
+        </div>
+        <p class="tool-desc">${t.desc || ''}</p>
+        <div class="badges">${plats}${ui}${lang}${lic}</div>
+        <div class="tool-meta">
+          <span>⭐ <b class="star">${fmtStars(t.stars)}</b></span>
+          <span>🕐 <b>${fmtDate(t.lastPush)}</b></span>
+        </div>
+      </article>
+    `;
+  }
+
+  // 数据加载失败时的兜底
+  function showError(msg) {
+    document.getElementById('content').innerHTML =
+      `<div class="status-box error">${msg}</div>`;
+  }
+
+  fetch('yt-dlp-tools.json', { cache: 'no-store' })
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(render)
+    .catch(err => {
+      showError('⚠️ 工具清单加载失败：' + err.message +
+        '<br>请确认 yt-dlp-tools.json 与本页面在同一目录（部署于 GitHub Pages 时正常）。');
+    });
+})();
+</script>
+<script src="footer.js"></script>
+</body>
+</html>
