@@ -17,14 +17,20 @@
           "name": "yt-dlp",
           "repo": "yt-dlp/yt-dlp",
           "desc": "功能强大的命令行音视频下载器，支持数千个网站，是以下所有工具的下载核心（本体）",
-          "platforms": ["windows", "macos", "linux", "android"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux",
+            "android"
+          ],
           "ui": "cli",
           "lang": "Python",
           "license": "Unlicense",
           "stars": 187893,
           "lastPush": "2026-08-30"
         }
-      ]
+      ],
+      "shortName": "命令行"
     },
     {
       "id": "gui-cross",
@@ -36,7 +42,11 @@
           "name": "Open Video Downloader",
           "repo": "jely2002/youtube-dl-gui",
           "desc": "老牌 youtube-dl-gui 的 Rust/Tauri 重构版，支持批量下载、字幕、播放列表",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Rust",
           "license": "AGPL-3.0",
@@ -47,7 +57,11 @@
           "name": "ytDownloader",
           "repo": "aandrew-me/ytDownloader",
           "desc": "Flutter 编写的跨平台桌面下载器，支持数百个网站的音视频下载",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Flutter",
           "license": "GPL-3.0",
@@ -58,7 +72,11 @@
           "name": "OmniGet",
           "repo": "tonhowtf/omniget",
           "desc": "主打课程下载（Udemy/Hotmart 等 1800+ 站点），内置课程播放器、PDF/EPUB 阅读器和音乐库",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Rust",
           "license": "GPL-3.0",
@@ -69,7 +87,11 @@
           "name": "media-downloader",
           "repo": "mhogomchungu/media-downloader",
           "desc": "Qt/C++ 跨平台下载器，yt-dlp 为默认后端，支持并发下载、批量任务、播放列表订阅",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "C++",
           "license": "GPL-2.0",
@@ -80,7 +102,11 @@
           "name": "Tartube",
           "repo": "axcore/tartube",
           "desc": "Python/GTK 下载前端，特色是视频库管理与定时下载，支持直播录制",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Python",
           "license": "LGPL-2.1",
@@ -91,7 +117,11 @@
           "name": "Arroxy",
           "repo": "antonio-orionus/Arroxy",
           "desc": "Electron 跨平台下载器，支持 4K/1080p60/HDR、字幕与 24 种语言界面",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
@@ -102,7 +132,11 @@
           "name": "yt-dlp GUI",
           "repo": "imsyy/yt-dlp-gui",
           "desc": "Tauri + Vue 现代界面，支持 YouTube、Bilibili、TikTok 等 1000+ 站点",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Vue",
           "license": "MIT",
@@ -113,7 +147,11 @@
           "name": "GDownloader",
           "repo": "hstr0100/GDownloader",
           "desc": "Java 跨平台下载器，可配合 gallery-dl/spotDL 批量下载，支持硬件加速转码",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Java",
           "license": "GPL-3.0",
@@ -124,7 +162,12 @@
           "name": "comine",
           "repo": "nichind/comine",
           "desc": "Tauri 跨平台下载/归档工具：视频、音频、文件、种子、图库一体的全能下载器",
-          "platforms": ["windows", "macos", "linux", "android"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux",
+            "android"
+          ],
           "ui": "gui",
           "lang": "Rust",
           "license": "GPL-3.0",
@@ -135,14 +178,19 @@
           "name": "YT Channel Downloader",
           "repo": "hyperfield/yt-channel-downloader",
           "desc": "Qt 界面，专门批量下载 YouTube 等平台的整个频道或选中视频（频道批量场景）",
-          "platforms": ["windows", "macos", "linux"],
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Python",
           "license": "MIT",
           "stars": 515,
           "lastPush": "2026-07-10"
         }
-      ]
+      ],
+      "shortName": "跨平台"
     },
     {
       "id": "gui-win",
@@ -154,7 +202,9 @@
           "name": "Cube YouTube Downloader",
           "repo": "database64128/youtube-dl-wpf",
           "desc": "WPF 现代界面，支持 yt-dlp / youtube-dl 双后端，格式与质量选择灵活",
-          "platforms": ["windows"],
+          "platforms": [
+            "windows"
+          ],
           "ui": "gui",
           "lang": "C#",
           "license": "GPL-3.0",
@@ -165,7 +215,9 @@
           "name": "Vividl",
           "repo": "Bluegrams/Vividl",
           "desc": "现代 Windows GUI（WPF），支持数百个网站，格式预设与批量下载",
-          "platforms": ["windows"],
+          "platforms": [
+            "windows"
+          ],
           "ui": "gui",
           "lang": "C#",
           "license": "BSD-3-Clause",
@@ -176,7 +228,9 @@
           "name": "ytdlpgui",
           "repo": "cornradio/ytdlpgui",
           "desc": "中文界面，简单易用，内置代理设置（测试支持 YouTube / TikTok / Bilibili）",
-          "platforms": ["windows"],
+          "platforms": [
+            "windows"
+          ],
           "ui": "gui",
           "lang": "Python",
           "license": "",
@@ -187,7 +241,9 @@
           "name": "yt-dlp-gui-v2",
           "repo": "kannagi0303/yt-dlp-gui-v2",
           "desc": "Rust 编写的 Windows 便携版下载器，单文件免安装",
-          "platforms": ["windows"],
+          "platforms": [
+            "windows"
+          ],
           "ui": "gui",
           "lang": "Rust",
           "license": "MIT",
@@ -198,14 +254,17 @@
           "name": "Spotify Downloader",
           "repo": "WilliamSchack/Spotify-Downloader",
           "desc": "输入 Spotify 歌单链接即从 YouTube 下载对应歌曲并补齐元数据（Spotify 场景）",
-          "platforms": ["windows"],
+          "platforms": [
+            "windows"
+          ],
           "ui": "gui",
           "lang": "C++",
           "license": "GPL-3.0",
           "stars": 493,
           "lastPush": "2026-08-21"
         }
-      ]
+      ],
+      "shortName": "Windows"
     },
     {
       "id": "gui-mac",
@@ -217,7 +276,9 @@
           "name": "MacYTDL",
           "repo": "section83/MacYTDL",
           "desc": "macOS 原生下载前端（AppleScript），无需终端即可使用 yt-dlp",
-          "platforms": ["macos"],
+          "platforms": [
+            "macos"
+          ],
           "ui": "gui",
           "lang": "AppleScript",
           "license": "",
@@ -228,14 +289,17 @@
           "name": "YouTube Downloader for macOS",
           "repo": "DenBeke/YouTube-Downloader-for-macOS",
           "desc": "菜单栏小工具，粘贴链接即可快速下载 YouTube 视频",
-          "platforms": ["macos"],
+          "platforms": [
+            "macos"
+          ],
           "ui": "gui",
           "lang": "Swift",
           "license": "",
           "stars": 606,
           "lastPush": "2025-09-25"
         }
-      ]
+      ],
+      "shortName": "macOS"
     },
     {
       "id": "gui-linux",
@@ -247,7 +311,10 @@
           "name": "Parabolic",
           "repo": "NickvisionApps/Parabolic",
           "desc": "GNOME 原生界面（另有 Windows WinUI 版），支持多任务下载、字幕、格式转换与浏览器扩展",
-          "platforms": ["linux", "windows"],
+          "platforms": [
+            "linux",
+            "windows"
+          ],
           "ui": "gui",
           "lang": "C#",
           "license": "MIT",
@@ -258,14 +325,17 @@
           "name": "video-downloader",
           "repo": "Unrud/video-downloader",
           "desc": "GTK 轻量下载器，支持播放列表、私有视频、自动选格式与 MP3 转换",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Python",
           "license": "GPL-3.0",
           "stars": 1186,
           "lastPush": "2026-08-22"
         }
-      ]
+      ],
+      "shortName": "Linux"
     },
     {
       "id": "web",
@@ -277,7 +347,9 @@
           "name": "MeTube",
           "repo": "alexta69/metube",
           "desc": "最流行的轻量自托管下载器，Docker 一键部署，支持 YouTube 等数十个站点",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
@@ -288,7 +360,9 @@
           "name": "TubeArchivist",
           "repo": "TubeArchivist/TubeArchivist",
           "desc": "完整的自托管 YouTube 媒体服务器：订阅、自动下载、索引、搜索与播放",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "Python",
           "license": "GPL-3.0",
@@ -299,7 +373,9 @@
           "name": "Pinchflat",
           "repo": "kieraneglin/pinchflat",
           "desc": "自托管 YouTube 媒体管理器，订阅频道自动下载，输出 Plex / Jellyfin 友好格式",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "Elixir",
           "license": "AGPL-3.0",
@@ -310,7 +386,9 @@
           "name": "TubeSync",
           "repo": "meeb/tubesync",
           "desc": "类 Sonarr 的 YouTube PVR：同步频道与播放列表到本地媒体库",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
@@ -321,7 +399,9 @@
           "name": "yt-dlp-web-ui",
           "repo": "marcopiovanello/yt-dlp-web-ui",
           "desc": "Go 编写的自托管 Web UI + RPC 服务器，配套 Vue 前端（yt-dlp-vue），轻量快速",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "Go",
           "license": "GPL-3.0",
@@ -332,7 +412,9 @@
           "name": "youtube-dl-nas",
           "repo": "hyeonsangjeon/youtube-dl-nas",
           "desc": "面向 NAS 的轻量下载队列：音视频、字幕、断点续传，Docker 部署",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "Python",
           "license": "MIT",
@@ -343,14 +425,17 @@
           "name": "MediaSync",
           "repo": "lincolnpark2000/MediaSync",
           "desc": "中文 Web 界面：订阅追踪、聚合搜索、直播监控录制一站式（Docker-ready）",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "ui": "web",
           "lang": "TypeScript",
           "license": "",
           "stars": 38,
           "lastPush": "2026-08-26"
         }
-      ]
+      ],
+      "shortName": "Web 自托管"
     },
     {
       "id": "android",
@@ -362,7 +447,9 @@
           "name": "Seal",
           "repo": "JunkFood02/Seal",
           "desc": "Android 上最流行的音视频下载器，支持播放列表、字幕、格式选择",
-          "platforms": ["android"],
+          "platforms": [
+            "android"
+          ],
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
@@ -373,7 +460,9 @@
           "name": "YTDLnis",
           "repo": "deniscerri/ytdlnis",
           "desc": "功能全面的 Android 下载器：通知栏控制、定时下载、订阅更新检测",
-          "platforms": ["android"],
+          "platforms": [
+            "android"
+          ],
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
@@ -384,7 +473,9 @@
           "name": "Stash",
           "repo": "rawnaldclark/Stash",
           "desc": "Spotify + YouTube Music 音乐库管理器：歌单同步、FLAC 无损下载（音乐场景）",
-          "platforms": ["android"],
+          "platforms": [
+            "android"
+          ],
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
@@ -395,7 +486,9 @@
           "name": "AIO Video Downloader",
           "repo": "shibaFoss/AIO-Video-Downloader",
           "desc": "Android 音视频下载器，开源无广告，界面简洁",
-          "platforms": ["android"],
+          "platforms": [
+            "android"
+          ],
           "ui": "gui",
           "lang": "Java",
           "license": "",
@@ -406,7 +499,9 @@
           "name": "ClipSave",
           "repo": "abdellatif-laghjaj/ClipSave",
           "desc": "Android 全能媒体下载器：1000+ 站点，支持视频、音频、图片，无需存储权限",
-          "platforms": ["android"],
+          "platforms": [
+            "android"
+          ],
           "ui": "gui",
           "lang": "Kotlin",
           "license": "MIT",
@@ -417,7 +512,9 @@
           "name": "VidBee",
           "repo": "Autsunset/VidBee_Flutter",
           "desc": "Flutter 编写的现代 Android 下载器，支持 1000+ 网站",
-          "platforms": ["android"],
+          "platforms": [
+            "android"
+          ],
           "ui": "gui",
           "lang": "Dart",
           "license": "MIT",
@@ -428,14 +525,19 @@
           "name": "yt-dlp-kivy",
           "repo": "odrevet/yt-dlp-kivy",
           "desc": "Kivy 框架界面，一套代码可运行于 Android 与桌面（Windows/Linux）",
-          "platforms": ["android", "windows", "linux"],
+          "platforms": [
+            "android",
+            "windows",
+            "linux"
+          ],
           "ui": "gui",
           "lang": "Python",
           "license": "",
           "stars": 84,
           "lastPush": "2026-08-14"
         }
-      ]
+      ],
+      "shortName": "Android"
     }
   ]
 }

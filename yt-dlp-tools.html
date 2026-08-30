@@ -31,7 +31,7 @@
     line-height: 1.6;
     padding: calc(14px + env(safe-area-inset-top, 0px)) 14px calc(24px + env(safe-area-inset-bottom, 0px));
   }
-  #app { max-width: 860px; margin: 0 auto; }
+  #app { max-width: 1100px; margin: 0 auto; }
 
   /* ===== 头部 ===== */
   header { text-align: center; margin-bottom: 18px; }
@@ -61,19 +61,20 @@
   }
 
   /* ===== 布局：侧边栏 + 内容 ===== */
-  .layout { display: flex; gap: 18px; align-items: flex-start; }
+  .layout { display: flex; gap: 40px; align-items: flex-start; }
   main.content { flex: 1; min-width: 0; }
 
   /* ===== 分类导航（桌面：左侧栏）===== */
   nav.catnav {
     position: sticky;
     top: 14px;
-    width: 190px;
+    width: 168px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 6px 2px 12px;
+    padding: 6px 20px 12px 0;
+    border-right: 1.5px dashed #d8d0bf;
     max-height: calc(100vh - 40px);
     overflow-y: auto;
     scrollbar-width: none;
@@ -99,7 +100,7 @@
 
   /* 移动端：分类导航变顶部换行 chips */
   @media (max-width: 899px) {
-    .layout { flex-direction: column; }
+    .layout { flex-direction: column; gap: 0; }
     nav.catnav {
       position: static;
       width: auto;
@@ -109,6 +110,7 @@
       max-height: none;
       overflow: visible;
       padding: 6px 2px 12px;
+      border-right: none;
       margin-bottom: 4px;
     }
     .catnav a { border-radius: 999px; padding: 6px 14px; }
@@ -257,10 +259,10 @@
     document.getElementById('chip-total').textContent = '共 ' + total + ' 个工具';
     if (m.criteria) document.getElementById('criteria').textContent = m.criteria;
 
-    // 左侧分类导航
+    // 左侧分类导航（用短名 shortName）
     const nav = document.getElementById('catnav');
     nav.innerHTML = cats.map((c, i) =>
-      `<a href="#cat-${c.id}"><span class="catnav-icon">${c.icon || ''}</span>${c.name}</a>`
+      `<a href="#cat-${c.id}"><span class="catnav-icon">${c.icon || ''}</span>${c.shortName || c.name}</a>`
     ).join('');
 
     // 分类区块
