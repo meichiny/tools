@@ -1,9 +1,9 @@
 {
   "meta": {
     "title": "yt-dlp 工具集",
-    "subtitle": "基于 yt-dlp 的视频下载工具清单 · 来源：GitHub 公开仓库",
+    "subtitle": "基于 yt-dlp 的视频下载工具清单",
     "updatedAt": "2026-08-31",
-    "criteria": "收录标准：以 yt-dlp 为下载后端、仍在活跃维护、star ≥ 50 或功能独特",
+    "criteria": "收录标准：GitHub 公开仓库，以 yt-dlp 为下载后端、仍在活跃维护、star ≥ 50 或功能独特。",
     "note": "star 数与最后更新为数据快照（2026-08-31），点击工具名可前往 GitHub 查看最新状态"
   },
   "categories": [
