@@ -187,17 +187,6 @@
     word-break: break-all;
   }
   .tool-desc { font-size: 14px; color: var(--desc); }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-  .badge {
-    font-size: 12px;
-    font-weight: 600;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 1px 8px;
-    background: var(--card);
-  }
-  .badge.plat { background: var(--blue-soft); }
-  .badge.ui { background: var(--orange-soft); }
   .tool-meta {
     margin-top: auto;
     display: flex;
@@ -283,9 +272,6 @@
 
 <script>
 (function () {
-  const PLATFORM = { windows: '🪟 Windows', macos: '🍎 macOS', linux: '🐧 Linux', android: '🤖 Android' };
-  const UI = { cli: '⌨️ 命令行', gui: '🖥️ 图形界面', web: '🌐 Web 界面' };
-
   // ===== 深色 / 浅色主题切换 =====
   const THEME_KEY = 'ytdlp-theme';
   const themeBtn = document.getElementById('theme-btn');
@@ -385,10 +371,6 @@
   }
 
   function toolCard(t) {
-    const plats = (t.platforms || []).map(p => PLATFORM[p] ? `<span class="badge plat">${PLATFORM[p]}</span>` : '').join('');
-    const ui = UI[t.ui] ? `<span class="badge ui">${UI[t.ui]}</span>` : '';
-    const lang = t.lang ? `<span class="badge">${t.lang}</span>` : '';
-    const lic = t.license ? `<span class="badge">${t.license}</span>` : '';
     return `
       <article class="tool">
         <div class="tool-top">
@@ -396,7 +378,6 @@
           <span class="tool-repo">${t.repo}</span>
         </div>
         <p class="tool-desc">${t.desc || ''}</p>
-        <div class="badges">${plats}${ui}${lang}${lic}</div>
         <div class="tool-meta">
           <span>⭐ <b class="star">${fmtStars(t.stars)}</b></span>
           <span>🕐 <b>${fmtDate(t.lastPush)}</b></span>
