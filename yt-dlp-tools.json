@@ -338,106 +338,6 @@
       "shortName": "Linux"
     },
     {
-      "id": "web",
-      "name": "Web 界面 · 自托管",
-      "icon": "🌐",
-      "hint": "部署在服务器 / NAS / Docker 上，浏览器访问",
-      "tools": [
-        {
-          "name": "MeTube",
-          "repo": "alexta69/metube",
-          "desc": "最流行的轻量自托管下载器，Docker 一键部署，支持 YouTube 等数十个站点",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "Python",
-          "license": "AGPL-3.0",
-          "stars": 14553,
-          "lastPush": "2026-08-28"
-        },
-        {
-          "name": "TubeArchivist",
-          "repo": "TubeArchivist/TubeArchivist",
-          "desc": "完整的自托管 YouTube 媒体服务器：订阅、自动下载、索引、搜索与播放",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "Python",
-          "license": "GPL-3.0",
-          "stars": 8408,
-          "lastPush": "2026-08-28"
-        },
-        {
-          "name": "Pinchflat",
-          "repo": "kieraneglin/pinchflat",
-          "desc": "自托管 YouTube 媒体管理器，订阅频道自动下载，输出 Plex / Jellyfin 友好格式",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "Elixir",
-          "license": "AGPL-3.0",
-          "stars": 5289,
-          "lastPush": "2025-12-16"
-        },
-        {
-          "name": "TubeSync",
-          "repo": "meeb/tubesync",
-          "desc": "类 Sonarr 的 YouTube PVR：同步频道与播放列表到本地媒体库",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "Python",
-          "license": "AGPL-3.0",
-          "stars": 2786,
-          "lastPush": "2026-08-30"
-        },
-        {
-          "name": "yt-dlp-web-ui",
-          "repo": "marcopiovanello/yt-dlp-web-ui",
-          "desc": "Go 编写的自托管 Web UI + RPC 服务器，配套 Vue 前端（yt-dlp-vue），轻量快速",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "Go",
-          "license": "GPL-3.0",
-          "stars": 2564,
-          "lastPush": "2026-08-21"
-        },
-        {
-          "name": "youtube-dl-nas",
-          "repo": "hyeonsangjeon/youtube-dl-nas",
-          "desc": "面向 NAS 的轻量下载队列：音视频、字幕、断点续传，Docker 部署",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "Python",
-          "license": "MIT",
-          "stars": 193,
-          "lastPush": "2026-08-30"
-        },
-        {
-          "name": "MediaSync",
-          "repo": "lincolnpark2000/MediaSync",
-          "desc": "中文 Web 界面：订阅追踪、聚合搜索、直播监控录制一站式（Docker-ready）",
-          "platforms": [
-            "linux"
-          ],
-          "ui": "web",
-          "lang": "TypeScript",
-          "license": "",
-          "stars": 38,
-          "lastPush": "2026-08-26"
-        }
-      ],
-      "shortName": "Web 自托管"
-    },
-    {
       "id": "android",
       "name": "移动端 · Android",
       "icon": "🤖",
@@ -538,6 +438,106 @@
         }
       ],
       "shortName": "Android"
+    },
+    {
+      "id": "web",
+      "name": "Web 界面 · 自托管",
+      "icon": "🌐",
+      "hint": "部署在服务器 / NAS / Docker 上，浏览器访问",
+      "tools": [
+        {
+          "name": "MeTube",
+          "repo": "alexta69/metube",
+          "desc": "最流行的轻量自托管下载器，Docker 一键部署，支持 YouTube 等数十个站点",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "AGPL-3.0",
+          "stars": 14553,
+          "lastPush": "2026-08-28"
+        },
+        {
+          "name": "TubeArchivist",
+          "repo": "TubeArchivist/TubeArchivist",
+          "desc": "完整的自托管 YouTube 媒体服务器：订阅、自动下载、索引、搜索与播放",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "GPL-3.0",
+          "stars": 8408,
+          "lastPush": "2026-08-28"
+        },
+        {
+          "name": "Pinchflat",
+          "repo": "kieraneglin/pinchflat",
+          "desc": "自托管 YouTube 媒体管理器，订阅频道自动下载，输出 Plex / Jellyfin 友好格式",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Elixir",
+          "license": "AGPL-3.0",
+          "stars": 5289,
+          "lastPush": "2025-12-16"
+        },
+        {
+          "name": "TubeSync",
+          "repo": "meeb/tubesync",
+          "desc": "类 Sonarr 的 YouTube PVR：同步频道与播放列表到本地媒体库",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "AGPL-3.0",
+          "stars": 2786,
+          "lastPush": "2026-08-30"
+        },
+        {
+          "name": "yt-dlp-web-ui",
+          "repo": "marcopiovanello/yt-dlp-web-ui",
+          "desc": "Go 编写的自托管 Web UI + RPC 服务器，配套 Vue 前端（yt-dlp-vue），轻量快速",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Go",
+          "license": "GPL-3.0",
+          "stars": 2564,
+          "lastPush": "2026-08-21"
+        },
+        {
+          "name": "youtube-dl-nas",
+          "repo": "hyeonsangjeon/youtube-dl-nas",
+          "desc": "面向 NAS 的轻量下载队列：音视频、字幕、断点续传，Docker 部署",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "MIT",
+          "stars": 193,
+          "lastPush": "2026-08-30"
+        },
+        {
+          "name": "MediaSync",
+          "repo": "lincolnpark2000/MediaSync",
+          "desc": "中文 Web 界面：订阅追踪、聚合搜索、直播监控录制一站式（Docker-ready）",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "TypeScript",
+          "license": "",
+          "stars": 38,
+          "lastPush": "2026-08-26"
+        }
+      ],
+      "shortName": "Web 自托管"
     }
   ]
 }
