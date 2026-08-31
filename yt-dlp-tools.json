@@ -26,7 +26,7 @@
           "ui": "cli",
           "lang": "Python",
           "license": "Unlicense",
-          "stars": 187893,
+          "stars": 187966,
           "lastPush": "2026-08-30"
         }
       ],
@@ -50,7 +50,7 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "AGPL-3.0",
-          "stars": 9105,
+          "stars": 9107,
           "lastPush": "2026-08-11"
         },
         {
@@ -65,8 +65,8 @@
           "ui": "gui",
           "lang": "Flutter",
           "license": "GPL-3.0",
-          "stars": 10250,
-          "lastPush": "2026-08-29"
+          "stars": 10254,
+          "lastPush": "2026-08-30"
         },
         {
           "name": "OmniGet",
@@ -80,7 +80,7 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "GPL-3.0",
-          "stars": 9238,
+          "stars": 9250,
           "lastPush": "2026-08-29"
         },
         {
@@ -95,8 +95,8 @@
           "ui": "gui",
           "lang": "C++",
           "license": "GPL-2.0",
-          "stars": 4945,
-          "lastPush": "2026-08-29"
+          "stars": 4947,
+          "lastPush": "2026-08-30"
         },
         {
           "name": "Tartube",
@@ -110,7 +110,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "LGPL-2.1",
-          "stars": 3099,
+          "stars": 3100,
           "lastPush": "2026-07-13"
         },
         {
@@ -125,7 +125,7 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 318,
+          "stars": 320,
           "lastPush": "2026-08-30"
         },
         {
@@ -140,7 +140,7 @@
           "ui": "gui",
           "lang": "Vue",
           "license": "MIT",
-          "stars": 272,
+          "stars": 273,
           "lastPush": "2026-08-17"
         },
         {
@@ -155,7 +155,7 @@
           "ui": "gui",
           "lang": "Java",
           "license": "GPL-3.0",
-          "stars": 214,
+          "stars": 215,
           "lastPush": "2026-08-30"
         },
         {
@@ -208,7 +208,7 @@
           "ui": "gui",
           "lang": "C#",
           "license": "GPL-3.0",
-          "stars": 1406,
+          "stars": 1408,
           "lastPush": "2026-08-26"
         },
         {
@@ -234,7 +234,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "",
-          "stars": 355,
+          "stars": 356,
           "lastPush": "2026-06-22"
         },
         {
@@ -282,7 +282,7 @@
           "ui": "gui",
           "lang": "AppleScript",
           "license": "",
-          "stars": 991,
+          "stars": 992,
           "lastPush": "2026-08-02"
         },
         {
@@ -353,7 +353,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 28585,
+          "stars": 28599,
           "lastPush": "2026-08-25"
         },
         {
@@ -366,7 +366,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 9871,
+          "stars": 9877,
           "lastPush": "2026-08-28"
         },
         {
@@ -379,7 +379,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 990,
+          "stars": 995,
           "lastPush": "2026-08-24"
         },
         {
@@ -392,7 +392,7 @@
           "ui": "gui",
           "lang": "Java",
           "license": "",
-          "stars": 477,
+          "stars": 478,
           "lastPush": "2026-08-13"
         },
         {
@@ -405,7 +405,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "MIT",
-          "stars": 137,
+          "stars": 138,
           "lastPush": "2026-08-09"
         },
         {
@@ -455,7 +455,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 14553,
+          "stars": 14556,
           "lastPush": "2026-08-28"
         },
         {
@@ -468,7 +468,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "GPL-3.0",
-          "stars": 8408,
+          "stars": 8409,
           "lastPush": "2026-08-28"
         },
         {
@@ -494,7 +494,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 2786,
+          "stars": 2787,
           "lastPush": "2026-08-30"
         },
         {
@@ -507,7 +507,7 @@
           "ui": "web",
           "lang": "Go",
           "license": "GPL-3.0",
-          "stars": 2564,
+          "stars": 2567,
           "lastPush": "2026-08-21"
         },
         {

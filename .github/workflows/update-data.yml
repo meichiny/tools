@@ -1,0 +1,42 @@
+name: Update yt-dlp data
+
+on:
+  schedule:
+    # 每月 1 日、15 日 08:00（北京时间）自动更新数据快照
+    # GitHub Actions 的 cron 使用 UTC，08:00 北京时间 = 00:00 UTC
+    - cron: '0 0 1,15 * *'
+  workflow_dispatch: # 也支持手动触发
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 拉取最新数据并检测停更
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python3 update-data.py
+
+      - name: 提交变更
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add yt-dlp-tools.json
+          if git diff --cached --quiet; then
+            echo "数据无变化，跳过提交"
+            exit 0
+          fi
+          git commit -m "chore: 数据快照更新 $(date +%F)"
+          git push

@@ -204,6 +204,16 @@
   }
   .tool-meta b { color: var(--ink); }
   .star { color: var(--star); font-weight: 700; }
+  .stale {
+    color: var(--red);
+    font-weight: 800;
+    background: var(--red);
+    color: #fff;
+    border-radius: 999px;
+    padding: 1px 10px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
 
   /* ===== 加载/错误 ===== */
   .status-box {
@@ -398,6 +408,7 @@
         </div>
         <p class="tool-desc">${t.desc || ''}</p>
         <div class="tool-meta">
+          ${t.stale ? '<span class="stale">⚠️ 停更</span>' : ''}
           <span>⭐ <b class="star">${fmtStars(t.stars)}</b></span>
           <span>🕐 <b>${fmtDate(t.lastPush)}</b></span>
         </div>
