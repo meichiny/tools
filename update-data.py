@@ -86,6 +86,7 @@ def main():
     with open(DATA, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+    print(f'GH_TOKEN: {"已配置（限速 5000/hr）" if TOKEN else "未配置（匿名，限速 60/hr）"}')
     print(f'共检查 {len(tools)} 个工具，{len(changed)} 个有变化')
     for repo, old, new in changed:
         flag = '，⚠️ 停更' if new[2] else ''

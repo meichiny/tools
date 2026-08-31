@@ -98,6 +98,7 @@ def main():
                 f.write(f'   {c["desc"]}\n')
             f.write('\n')
 
+    print(f'GH_TOKEN: {"已配置（限速 5000/hr）" if TOKEN else "未配置（匿名，限速 60/hr）"}')
     print(f'发现 {len(cands)} 个候选 → {os.path.relpath(path, BASE)}')
 
     summary = os.environ.get('GITHUB_STEP_SUMMARY')
