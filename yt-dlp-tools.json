@@ -28,6 +28,65 @@
           "license": "Unlicense",
           "stars": 187972,
           "lastPush": "2026-08-30"
+        },
+        {
+          "name": "ytdl-sub",
+          "repo": "jmbannon/ytdl-sub",
+          "desc": "订阅式自动下载器：按频道/播放列表规则定时拉取，自动整理元数据，媒体库自动化利器",
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
+          "ui": "cli",
+          "lang": "Python",
+          "license": "GPL-3.0",
+          "stars": 2926,
+          "lastPush": "2026-08-29"
+        },
+        {
+          "name": "yt-x",
+          "repo": "Benexl/yt-x",
+          "desc": "终端里的 YouTube 浏览器：用 fzf/rofi 在命令行浏览 YouTube 及 yt-dlp 支持的站点，极客风",
+          "platforms": [
+            "linux",
+            "macos"
+          ],
+          "ui": "cli",
+          "lang": "Shell",
+          "license": "MIT",
+          "stars": 1647,
+          "lastPush": "2026-08-30"
+        },
+        {
+          "name": "JZSub",
+          "repo": "pengchujin/jzsub",
+          "desc": "一条视频链接，自动交付最高画质 + 封面 + GPT 双语字幕 MP4，字幕党福音",
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
+          "ui": "cli",
+          "lang": "Python",
+          "license": "MIT",
+          "stars": 974,
+          "lastPush": "2026-07-29"
+        },
+        {
+          "name": "ytconverter",
+          "repo": "kaifcodec/ytconverter",
+          "desc": "终端直接下载 YouTube 视频的 CLI 工具，支持多种格式，无需离开命令行",
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
+          "ui": "cli",
+          "lang": "Python",
+          "license": "MIT",
+          "stars": 676,
+          "lastPush": "2026-04-30"
         }
       ],
       "shortName": "命令行"
@@ -188,6 +247,51 @@
           "license": "MIT",
           "stars": 515,
           "lastPush": "2026-07-10"
+        },
+        {
+          "name": "YTSage",
+          "repo": "oop7/YTSage",
+          "desc": "PySide6 现代界面下载器：任意画质下载、提取音频、抓取字幕，界面清爽",
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
+          "ui": "gui",
+          "lang": "Python",
+          "license": "MIT",
+          "stars": 4552,
+          "lastPush": "2026-08-30"
+        },
+        {
+          "name": "youwee",
+          "repo": "vanloctech/youwee",
+          "desc": "高颜值跨平台下载器，支持 YouTube / TikTok / Instagram 等 1800+ 站点，带 AI 视频总结",
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
+          "ui": "gui",
+          "lang": "TypeScript",
+          "license": "MIT",
+          "stars": 1451,
+          "lastPush": "2026-08-23"
+        },
+        {
+          "name": "ezytdl",
+          "repo": "sylviiu/ezytdl",
+          "desc": "基于 Electron 的高级 yt-dlp 前端，功能全面的桌面下载器",
+          "platforms": [
+            "windows",
+            "macos",
+            "linux"
+          ],
+          "ui": "gui",
+          "lang": "JavaScript",
+          "license": "GPL-3.0",
+          "stars": 789,
+          "lastPush": "2026-04-10"
         }
       ],
       "shortName": "跨平台"
@@ -261,6 +365,19 @@
           "lang": "C++",
           "license": "GPL-3.0",
           "stars": 493,
+          "lastPush": "2026-08-21"
+        },
+        {
+          "name": "yt-short-clipper",
+          "repo": "jipraks/yt-short-clipper",
+          "desc": "把长视频自动剪成 9:16 竖屏短视频：AI 高光检测、人脸追踪，做短视频的利器",
+          "platforms": [
+            "windows"
+          ],
+          "ui": "gui",
+          "lang": "TypeScript",
+          "license": "MIT",
+          "stars": 978,
           "lastPush": "2026-08-21"
         }
       ],
@@ -535,6 +652,71 @@
           "license": "",
           "stars": 38,
           "lastPush": "2026-08-26"
+        },
+        {
+          "name": "Youtarr",
+          "repo": "DialmasterOrg/Youtarr",
+          "desc": "自托管 YouTube 频道自动化下载管理：定时抓取、自动整理，支持 Plex 集成",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "TypeScript",
+          "license": "ISC",
+          "stars": 1545,
+          "lastPush": "2026-08-30"
+        },
+        {
+          "name": "yubal",
+          "repo": "guillevc/yubal",
+          "desc": "自托管 YouTube Music 下载器：自动打标签、整理、同步播放列表，音乐库管理神器",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "MIT",
+          "stars": 1527,
+          "lastPush": "2026-08-24"
+        },
+        {
+          "name": "HomeTube",
+          "repo": "EgalitarianMonkey/hometube",
+          "desc": "面向家庭媒体服务器的下载器（Streamlit）：下载并自动整理去广告高清视频，可接入 Jellyfin / Plex",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "AGPL-3.0",
+          "stars": 1438,
+          "lastPush": "2026-08-29"
+        },
+        {
+          "name": "MyTube",
+          "repo": "franklioxygen/MyTube",
+          "desc": "自托管下载 + 播放一体：支持 YouTube、Bilibili、Twitch 等站点，频道订阅自动下载",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "TypeScript",
+          "license": "MIT",
+          "stars": 1147,
+          "lastPush": "2026-08-31"
+        },
+        {
+          "name": "ytptube",
+          "repo": "arabcoders/ytptube",
+          "desc": "自托管媒体下载管理器：yt-dlp 的自动化接口 + 媒体库整理层，适合高阶自动化玩家",
+          "platforms": [
+            "linux"
+          ],
+          "ui": "web",
+          "lang": "Python",
+          "license": "MIT",
+          "stars": 1012,
+          "lastPush": "2026-08-30"
         }
       ],
       "shortName": "Web 自托管"
