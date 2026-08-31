@@ -26,7 +26,7 @@
           "ui": "cli",
           "lang": "Python",
           "license": "Unlicense",
-          "stars": 187966,
+          "stars": 187972,
           "lastPush": "2026-08-30"
         }
       ],
@@ -353,7 +353,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 28599,
+          "stars": 28600,
           "lastPush": "2026-08-25"
         },
         {
@@ -366,7 +366,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 9877,
+          "stars": 9880,
           "lastPush": "2026-08-28"
         },
         {
