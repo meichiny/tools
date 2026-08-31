@@ -3,7 +3,7 @@
 筛选标准：star ≥ 100、近 180 天有更新、尚未收录。
 收录前请人工确认：确实是 yt-dlp 下载后端、维护状态良好、值得推荐。
 
-1. **[abus-aikorea/voice-pro](https://github.com/abus-aikorea/voice-pro)** ⭐12698（最后更新 2026-07-13） · Python
+1. **[abus-aikorea/voice-pro](https://github.com/abus-aikorea/voice-pro)** ⭐12699（最后更新 2026-07-13） · Python
    Gradio WebUI for creators and developers, featuring key TTS (Edge-TTS, kokoro) and zero-shot Voice Cloning (E2 & F5-TTS,
 
 2. **[oop7/YTSage](https://github.com/oop7/YTSage)** ⭐4552（最后更新 2026-08-30） · Python
@@ -15,7 +15,7 @@
 4. **[umlx5h/LLPlayer](https://github.com/umlx5h/LLPlayer)** ⭐4060（最后更新 2026-07-19） · C#
    The media player for language learning, with dual subtitles, AI-generated subtitles, real-time translation, and more!
 
-5. **[bjarneo/cliamp](https://github.com/bjarneo/cliamp)** ⭐3879（最后更新 2026-08-30） · C++
+5. **[bjarneo/cliamp](https://github.com/bjarneo/cliamp)** ⭐3880（最后更新 2026-08-30） · C++
    cliamp - Terminal music player inspired by winamp
 
 6. **[abhiTronix/vidgear](https://github.com/abhiTronix/vidgear)** ⭐3723（最后更新 2026-05-18） · Python
@@ -81,7 +81,7 @@
 26. **[atauenis/webone](https://github.com/atauenis/webone)** ⭐741（最后更新 2026-08-24） · C#
    HTTP 1.x proxy that makes old web browsers usable again in the Web 2.0 world.
 
-27. **[Brainicism/bgutil-ytdlp-pot-provider](https://github.com/Brainicism/bgutil-ytdlp-pot-provider)** ⭐713（最后更新 2026-08-30） · TypeScript
+27. **[Brainicism/bgutil-ytdlp-pot-provider](https://github.com/Brainicism/bgutil-ytdlp-pot-provider)** ⭐714（最后更新 2026-08-30） · TypeScript
    Proof-of-origin token provider plugin for yt-dlp
 
 28. **[kaifcodec/ytconverter](https://github.com/kaifcodec/ytconverter)** ⭐676（最后更新 2026-04-30） · Python
