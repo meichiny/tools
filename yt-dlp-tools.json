@@ -2,7 +2,7 @@
   "meta": {
     "title": "yt-dlp 工具集",
     "subtitle": "基于 yt-dlp 的视频下载工具清单",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-01",
     "criteria": "收录标准：GitHub 公开仓库，以 yt-dlp 为下载后端、仍在活跃维护、star ≥ 50 或功能独特。",
     "note": "star 数与最后更新为数据快照（2026-08-31），点击工具名可前往 GitHub 查看最新状态"
   },
@@ -26,7 +26,7 @@
           "ui": "cli",
           "lang": "Python",
           "license": "Unlicense",
-          "stars": 187972,
+          "stars": 188178,
           "lastPush": "2026-08-30"
         },
         {
@@ -42,7 +42,7 @@
           "lang": "Python",
           "license": "GPL-3.0",
           "stars": 2926,
-          "lastPush": "2026-08-29"
+          "lastPush": "2026-08-31"
         },
         {
           "name": "yt-x",
@@ -85,7 +85,7 @@
           "ui": "cli",
           "lang": "Python",
           "license": "MIT",
-          "stars": 676,
+          "stars": 677,
           "lastPush": "2026-04-30"
         }
       ],
@@ -109,7 +109,7 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "AGPL-3.0",
-          "stars": 9107,
+          "stars": 9111,
           "lastPush": "2026-08-11"
         },
         {
@@ -124,7 +124,7 @@
           "ui": "gui",
           "lang": "Flutter",
           "license": "GPL-3.0",
-          "stars": 10254,
+          "stars": 10257,
           "lastPush": "2026-08-30"
         },
         {
@@ -139,7 +139,7 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "GPL-3.0",
-          "stars": 9250,
+          "stars": 9278,
           "lastPush": "2026-08-29"
         },
         {
@@ -154,8 +154,8 @@
           "ui": "gui",
           "lang": "C++",
           "license": "GPL-2.0",
-          "stars": 4947,
-          "lastPush": "2026-08-30"
+          "stars": 4950,
+          "lastPush": "2026-08-31"
         },
         {
           "name": "Tartube",
@@ -169,7 +169,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "LGPL-2.1",
-          "stars": 3100,
+          "stars": 3101,
           "lastPush": "2026-07-13"
         },
         {
@@ -184,8 +184,8 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 320,
-          "lastPush": "2026-08-30"
+          "stars": 325,
+          "lastPush": "2026-08-31"
         },
         {
           "name": "yt-dlp GUI",
@@ -199,7 +199,7 @@
           "ui": "gui",
           "lang": "Vue",
           "license": "MIT",
-          "stars": 273,
+          "stars": 277,
           "lastPush": "2026-08-17"
         },
         {
@@ -260,7 +260,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "MIT",
-          "stars": 4552,
+          "stars": 4556,
           "lastPush": "2026-08-30"
         },
         {
@@ -275,7 +275,7 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 1451,
+          "stars": 1455,
           "lastPush": "2026-08-23"
         },
         {
@@ -312,7 +312,7 @@
           "ui": "gui",
           "lang": "C#",
           "license": "GPL-3.0",
-          "stars": 1408,
+          "stars": 1409,
           "lastPush": "2026-08-26"
         },
         {
@@ -351,7 +351,7 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "MIT",
-          "stars": 178,
+          "stars": 179,
           "lastPush": "2026-07-21"
         },
         {
@@ -377,7 +377,7 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 978,
+          "stars": 980,
           "lastPush": "2026-08-21"
         }
       ],
@@ -435,7 +435,7 @@
           "ui": "gui",
           "lang": "C#",
           "license": "MIT",
-          "stars": 6972,
+          "stars": 6976,
           "lastPush": "2026-06-29"
         },
         {
@@ -470,7 +470,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 28600,
+          "stars": 28622,
           "lastPush": "2026-08-25"
         },
         {
@@ -483,8 +483,8 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 9880,
-          "lastPush": "2026-08-28"
+          "stars": 9883,
+          "lastPush": "2026-08-31"
         },
         {
           "name": "Stash",
@@ -496,8 +496,8 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 995,
-          "lastPush": "2026-08-24"
+          "stars": 1003,
+          "lastPush": "2026-08-31"
         },
         {
           "name": "AIO Video Downloader",
@@ -509,7 +509,7 @@
           "ui": "gui",
           "lang": "Java",
           "license": "",
-          "stars": 478,
+          "stars": 479,
           "lastPush": "2026-08-13"
         },
         {
@@ -522,7 +522,7 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "MIT",
-          "stars": 138,
+          "stars": 139,
           "lastPush": "2026-08-09"
         },
         {
@@ -572,7 +572,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 14556,
+          "stars": 14563,
           "lastPush": "2026-08-28"
         },
         {
@@ -585,7 +585,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "GPL-3.0",
-          "stars": 8409,
+          "stars": 8411,
           "lastPush": "2026-08-28"
         },
         {
@@ -598,7 +598,7 @@
           "ui": "web",
           "lang": "Elixir",
           "license": "AGPL-3.0",
-          "stars": 5289,
+          "stars": 5290,
           "lastPush": "2025-12-16"
         },
         {
@@ -612,7 +612,7 @@
           "lang": "Python",
           "license": "AGPL-3.0",
           "stars": 2787,
-          "lastPush": "2026-08-30"
+          "lastPush": "2026-08-31"
         },
         {
           "name": "yt-dlp-web-ui",
@@ -650,7 +650,7 @@
           "ui": "web",
           "lang": "TypeScript",
           "license": "",
-          "stars": 38,
+          "stars": 39,
           "lastPush": "2026-08-26"
         },
         {
@@ -663,7 +663,7 @@
           "ui": "web",
           "lang": "TypeScript",
           "license": "ISC",
-          "stars": 1545,
+          "stars": 1548,
           "lastPush": "2026-08-30"
         },
         {
@@ -676,8 +676,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "MIT",
-          "stars": 1527,
-          "lastPush": "2026-08-24"
+          "stars": 1529,
+          "lastPush": "2026-08-31"
         },
         {
           "name": "HomeTube",
@@ -689,8 +689,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 1438,
-          "lastPush": "2026-08-29"
+          "stars": 1441,
+          "lastPush": "2026-09-01"
         },
         {
           "name": "MyTube",
@@ -702,7 +702,7 @@
           "ui": "web",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 1147,
+          "stars": 1148,
           "lastPush": "2026-08-31"
         },
         {
@@ -716,7 +716,7 @@
           "lang": "Python",
           "license": "MIT",
           "stars": 1012,
-          "lastPush": "2026-08-30"
+          "lastPush": "2026-08-31"
         }
       ],
       "shortName": "Web 自托管"
