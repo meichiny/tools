@@ -14,9 +14,10 @@ jobs:
   discover:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # v7 起改用 Node 24 运行时，与 runner 保持一致（旧版 v4/v5 只支持 Node 20，会被强制升级并刷弃用警告）
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 

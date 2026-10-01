@@ -140,7 +140,9 @@
           "lang": "Rust",
           "license": "GPL-3.0",
           "stars": 12294,
-          "lastPush": "2026-09-11"
+          "lastPush": "2026-09-11",
+          "dead": true,
+          "deadSince": "2026-10-01"
         },
         {
           "name": "media-downloader",
@@ -523,7 +525,9 @@
           "lang": "Kotlin",
           "license": "MIT",
           "stars": 145,
-          "lastPush": "2026-09-06"
+          "lastPush": "2026-09-06",
+          "dead": true,
+          "deadSince": "2026-10-01"
         },
         {
           "name": "VidBee",
