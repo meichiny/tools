@@ -1,0 +1,15 @@
+# Python 缓存
+__pycache__/
+*.pyc
+
+# macOS 系统文件
+.DS_Store
+
+# 本地工作台素材（小红书迷你工具源码与打包 zip，不参与线上站点）
+/install-game-minitool/
+/markdown-tutor-minitool/
+/pc-seg/
+/pc-seg.zip
+/quiz-template/
+/quiz-template.zip
+/xhs-search-post/
