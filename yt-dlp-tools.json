@@ -2,7 +2,7 @@
   "meta": {
     "title": "yt-dlp 工具集",
     "subtitle": "基于 yt-dlp 的视频下载工具清单",
-    "updatedAt": "2026-09-15",
+    "updatedAt": "2026-10-01",
     "criteria": "收录标准：GitHub 公开仓库，以 yt-dlp 为下载后端、仍在活跃维护、star ≥ 50 或功能独特。",
     "note": "star 数与最后更新为数据快照（2026-08-31），点击工具名可前往 GitHub 查看最新状态"
   },
@@ -26,8 +26,8 @@
           "ui": "cli",
           "lang": "Python",
           "license": "Unlicense",
-          "stars": 191198,
-          "lastPush": "2026-08-30"
+          "stars": 194628,
+          "lastPush": "2026-09-27"
         },
         {
           "name": "ytdl-sub",
@@ -41,8 +41,8 @@
           "ui": "cli",
           "lang": "Python",
           "license": "GPL-3.0",
-          "stars": 2941,
-          "lastPush": "2026-09-14"
+          "stars": 2959,
+          "lastPush": "2026-09-28"
         },
         {
           "name": "yt-x",
@@ -55,7 +55,7 @@
           "ui": "cli",
           "lang": "Shell",
           "license": "MIT",
-          "stars": 1656,
+          "stars": 1665,
           "lastPush": "2026-08-30"
         },
         {
@@ -70,7 +70,7 @@
           "ui": "cli",
           "lang": "Python",
           "license": "MIT",
-          "stars": 986,
+          "stars": 997,
           "lastPush": "2026-07-29"
         },
         {
@@ -85,7 +85,7 @@
           "ui": "cli",
           "lang": "Python",
           "license": "MIT",
-          "stars": 680,
+          "stars": 681,
           "lastPush": "2026-04-30"
         }
       ],
@@ -109,8 +109,8 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "AGPL-3.0",
-          "stars": 9194,
-          "lastPush": "2026-09-13"
+          "stars": 9307,
+          "lastPush": "2026-09-28"
         },
         {
           "name": "ytDownloader",
@@ -124,8 +124,8 @@
           "ui": "gui",
           "lang": "Flutter",
           "license": "GPL-3.0",
-          "stars": 10336,
-          "lastPush": "2026-09-14"
+          "stars": 10419,
+          "lastPush": "2026-09-24"
         },
         {
           "name": "OmniGet",
@@ -156,8 +156,8 @@
           "ui": "gui",
           "lang": "C++",
           "license": "GPL-2.0",
-          "stars": 4968,
-          "lastPush": "2026-09-14"
+          "stars": 5025,
+          "lastPush": "2026-09-30"
         },
         {
           "name": "Tartube",
@@ -171,8 +171,8 @@
           "ui": "gui",
           "lang": "Python",
           "license": "LGPL-2.1",
-          "stars": 3121,
-          "lastPush": "2026-07-13"
+          "stars": 3150,
+          "lastPush": "2026-09-21"
         },
         {
           "name": "Arroxy",
@@ -186,8 +186,8 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 357,
-          "lastPush": "2026-09-14"
+          "stars": 387,
+          "lastPush": "2026-09-28"
         },
         {
           "name": "yt-dlp GUI",
@@ -201,8 +201,8 @@
           "ui": "gui",
           "lang": "Vue",
           "license": "MIT",
-          "stars": 355,
-          "lastPush": "2026-09-10"
+          "stars": 447,
+          "lastPush": "2026-09-20"
         },
         {
           "name": "GDownloader",
@@ -216,8 +216,8 @@
           "ui": "gui",
           "lang": "Java",
           "license": "GPL-3.0",
-          "stars": 221,
-          "lastPush": "2026-08-30"
+          "stars": 229,
+          "lastPush": "2026-10-01"
         },
         {
           "name": "comine",
@@ -232,7 +232,7 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "GPL-3.0",
-          "stars": 198,
+          "stars": 201,
           "lastPush": "2026-06-14"
         },
         {
@@ -247,7 +247,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "MIT",
-          "stars": 518,
+          "stars": 516,
           "lastPush": "2026-07-10"
         },
         {
@@ -262,8 +262,8 @@
           "ui": "gui",
           "lang": "Python",
           "license": "MIT",
-          "stars": 4588,
-          "lastPush": "2026-09-13"
+          "stars": 4650,
+          "lastPush": "2026-09-30"
         },
         {
           "name": "youwee",
@@ -277,8 +277,8 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 1497,
-          "lastPush": "2026-08-23"
+          "stars": 1528,
+          "lastPush": "2026-09-20"
         },
         {
           "name": "ezytdl",
@@ -314,8 +314,8 @@
           "ui": "gui",
           "lang": "C#",
           "license": "GPL-3.0",
-          "stars": 1415,
-          "lastPush": "2026-09-10"
+          "stars": 1422,
+          "lastPush": "2026-09-29"
         },
         {
           "name": "Vividl",
@@ -327,7 +327,7 @@
           "ui": "gui",
           "lang": "C#",
           "license": "BSD-3-Clause",
-          "stars": 1294,
+          "stars": 1299,
           "lastPush": "2026-03-10"
         },
         {
@@ -340,7 +340,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "",
-          "stars": 356,
+          "stars": 354,
           "lastPush": "2026-06-22"
         },
         {
@@ -353,8 +353,8 @@
           "ui": "gui",
           "lang": "Rust",
           "license": "MIT",
-          "stars": 192,
-          "lastPush": "2026-09-05"
+          "stars": 227,
+          "lastPush": "2026-09-15"
         },
         {
           "name": "Spotify Downloader",
@@ -366,8 +366,8 @@
           "ui": "gui",
           "lang": "C++",
           "license": "GPL-3.0",
-          "stars": 495,
-          "lastPush": "2026-08-21"
+          "stars": 507,
+          "lastPush": "2026-09-30"
         },
         {
           "name": "yt-short-clipper",
@@ -379,8 +379,8 @@
           "ui": "gui",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 992,
-          "lastPush": "2026-08-21"
+          "stars": 1019,
+          "lastPush": "2026-09-20"
         }
       ],
       "shortName": "Windows"
@@ -401,7 +401,7 @@
           "ui": "gui",
           "lang": "AppleScript",
           "license": "",
-          "stars": 1007,
+          "stars": 1020,
           "lastPush": "2026-09-03"
         },
         {
@@ -414,8 +414,9 @@
           "ui": "gui",
           "lang": "Swift",
           "license": "",
-          "stars": 605,
-          "lastPush": "2025-09-25"
+          "stars": 602,
+          "lastPush": "2025-09-25",
+          "stale": true
         }
       ],
       "shortName": "macOS"
@@ -437,7 +438,7 @@
           "ui": "gui",
           "lang": "C#",
           "license": "MIT",
-          "stars": 7055,
+          "stars": 7186,
           "lastPush": "2026-06-29"
         },
         {
@@ -450,7 +451,7 @@
           "ui": "gui",
           "lang": "Python",
           "license": "GPL-3.0",
-          "stars": 1193,
+          "stars": 1212,
           "lastPush": "2026-09-11"
         }
       ],
@@ -472,8 +473,8 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 28958,
-          "lastPush": "2026-08-25"
+          "stars": 29348,
+          "lastPush": "2026-09-25"
         },
         {
           "name": "YTDLnis",
@@ -485,8 +486,8 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 10091,
-          "lastPush": "2026-09-13"
+          "stars": 10352,
+          "lastPush": "2026-09-29"
         },
         {
           "name": "Stash",
@@ -498,8 +499,8 @@
           "ui": "gui",
           "lang": "Kotlin",
           "license": "GPL-3.0",
-          "stars": 1067,
-          "lastPush": "2026-09-11"
+          "stars": 1129,
+          "lastPush": "2026-09-30"
         },
         {
           "name": "AIO Video Downloader",
@@ -511,8 +512,8 @@
           "ui": "gui",
           "lang": "Java",
           "license": "",
-          "stars": 490,
-          "lastPush": "2026-08-13"
+          "stars": 494,
+          "lastPush": "2026-09-18"
         },
         {
           "name": "ClipSave",
@@ -539,8 +540,8 @@
           "ui": "gui",
           "lang": "Dart",
           "license": "MIT",
-          "stars": 96,
-          "lastPush": "2026-08-11"
+          "stars": 106,
+          "lastPush": "2026-09-18"
         },
         {
           "name": "yt-dlp-kivy",
@@ -576,8 +577,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 14731,
-          "lastPush": "2026-09-10"
+          "stars": 14901,
+          "lastPush": "2026-09-29"
         },
         {
           "name": "TubeArchivist",
@@ -589,7 +590,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "GPL-3.0",
-          "stars": 8445,
+          "stars": 8483,
           "lastPush": "2026-08-28"
         },
         {
@@ -602,7 +603,7 @@
           "ui": "web",
           "lang": "Elixir",
           "license": "AGPL-3.0",
-          "stars": 5313,
+          "stars": 5388,
           "lastPush": "2025-12-16"
         },
         {
@@ -615,8 +616,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 2793,
-          "lastPush": "2026-09-14"
+          "stars": 2799,
+          "lastPush": "2026-09-30"
         },
         {
           "name": "yt-dlp-web-ui",
@@ -628,7 +629,7 @@
           "ui": "web",
           "lang": "Go",
           "license": "GPL-3.0",
-          "stars": 2582,
+          "stars": 2599,
           "lastPush": "2026-08-21"
         },
         {
@@ -641,8 +642,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "MIT",
-          "stars": 196,
-          "lastPush": "2026-09-06"
+          "stars": 200,
+          "lastPush": "2026-09-22"
         },
         {
           "name": "MediaSync",
@@ -654,8 +655,8 @@
           "ui": "web",
           "lang": "TypeScript",
           "license": "",
-          "stars": 52,
-          "lastPush": "2026-09-13"
+          "stars": 67,
+          "lastPush": "2026-09-23"
         },
         {
           "name": "Youtarr",
@@ -667,8 +668,8 @@
           "ui": "web",
           "lang": "TypeScript",
           "license": "ISC",
-          "stars": 1566,
-          "lastPush": "2026-09-14"
+          "stars": 1697,
+          "lastPush": "2026-10-01"
         },
         {
           "name": "yubal",
@@ -680,7 +681,7 @@
           "ui": "web",
           "lang": "Python",
           "license": "MIT",
-          "stars": 1556,
+          "stars": 1596,
           "lastPush": "2026-09-13"
         },
         {
@@ -693,8 +694,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "AGPL-3.0",
-          "stars": 1446,
-          "lastPush": "2026-09-14"
+          "stars": 1501,
+          "lastPush": "2026-09-29"
         },
         {
           "name": "MyTube",
@@ -706,8 +707,8 @@
           "ui": "web",
           "lang": "TypeScript",
           "license": "MIT",
-          "stars": 1199,
-          "lastPush": "2026-09-14"
+          "stars": 1233,
+          "lastPush": "2026-10-01"
         },
         {
           "name": "ytptube",
@@ -719,8 +720,8 @@
           "ui": "web",
           "lang": "Python",
           "license": "MIT",
-          "stars": 1024,
-          "lastPush": "2026-09-13"
+          "stars": 1032,
+          "lastPush": "2026-09-29"
         }
       ],
       "shortName": "Web 自托管"
