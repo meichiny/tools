@@ -141,8 +141,8 @@
           "license": "GPL-3.0",
           "stars": 12294,
           "lastPush": "2026-09-11",
-          "dead": true,
-          "deadSince": "2026-10-01"
+          "homepage": "https://getomniget.com/zh",
+          "repoOffline": true
         },
         {
           "name": "media-downloader",
@@ -514,21 +514,6 @@
           "license": "",
           "stars": 494,
           "lastPush": "2026-09-18"
-        },
-        {
-          "name": "ClipSave",
-          "repo": "abdellatif-laghjaj/ClipSave",
-          "desc": "Android 全能媒体下载器：1000+ 站点，支持视频、音频、图片，无需存储权限",
-          "platforms": [
-            "android"
-          ],
-          "ui": "gui",
-          "lang": "Kotlin",
-          "license": "MIT",
-          "stars": 145,
-          "lastPush": "2026-09-06",
-          "dead": true,
-          "deadSince": "2026-10-01"
         },
         {
           "name": "VidBee",

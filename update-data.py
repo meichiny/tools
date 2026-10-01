@@ -8,9 +8,16 @@
 - 更新 meta.updatedAt
 
 用法：
-  python3 update-data.py                # 匿名调用（限速 60 次/小时）
-  GH_TOKEN=xxx python3 update-data.py   # 带 token（限速 5000 次/小时）
-  python3 update-data.py --strict       # 任何非正常结果都算失败（旧的严格行为）
+  python3 update-data.py                   # 匿名调用（限速 60 次/小时）
+  GH_TOKEN=xxx python3 update-data.py      # 带 token（限速 5000 次/小时）
+  python3 update-data.py --recheck-offline # 强制复查标了 repoOffline 的仓库
+  python3 update-data.py --strict          # 任何非正常结果都算失败（旧的严格行为）
+
+条目上的可选字段（人工维护，脚本按此调整行为）：
+  url/homepage  官方站点；有则页面卡片名指向它，而不是 GitHub 仓库
+  repoOffline   true = 该仓库暂时不可访问（账号被限制等），默认跳过轮询；
+                用 --recheck-offline 复查，一旦恢复即自动清除该标记
+  404 会自动标记 dead，无需人工干预
 
 退出码（GitHub Actions 据此判断步骤成败）：
   0  数据已更新；个别仓库 404（已下线）、限速或网络抖动都不算失败，下次运行会重试
@@ -85,7 +92,7 @@ def parse_date(s):
         return None
 
 
-def write_summary(now, changed, gone, errors, fatal):
+def write_summary(now, changed, gone, skipped, pin_offline, errors, fatal):
     """写 GitHub Actions 步骤摘要；本地运行（无 GITHUB_STEP_SUMMARY）时跳过。
 
     注意：必须在决定退出码之前调用，否则失败时摘要会丢。
@@ -105,6 +112,10 @@ def write_summary(now, changed, gone, errors, fatal):
             f.write(f'\n### ⛔ 已下线 {len(gone)} 个（未影响本次运行）\n\n')
             for repo in gone:
                 f.write(f'- `{repo}`\n')
+        if skipped or pin_offline:
+            f.write(f'\n### ℹ️ 仓库暂不可访问 {len(skipped) + len(pin_offline)} 个（已跳过轮询）\n\n')
+            for repo in skipped + pin_offline:
+                f.write(f'- `{repo}`\n')
         if errors:
             f.write(f'\n### ⚠️ 本轮请求失败 {len(errors)} 个（下次运行会重试）\n\n')
             for repo, err in errors:
@@ -112,7 +123,9 @@ def write_summary(now, changed, gone, errors, fatal):
 
 
 def main():
-    strict = '--strict' in sys.argv[1:]
+    args = sys.argv[1:]
+    strict = '--strict' in args
+    recheck_offline = '--recheck-offline' in args
 
     with open(DATA, encoding='utf-8') as f:
         data = json.load(f)
@@ -123,12 +136,21 @@ def main():
     stale_cutoff = now - timedelta(days=STALE_DAYS)
     changed = []   # (repo, 说明)
     gone = []      # 本轮确认已下线（404）的仓库
+    skipped = []   # 标了 repoOffline、本轮跳过轮询的仓库
+    pin_offline = []  # --recheck-offline 复查后仍不可访问的仓库
     errors = []    # (repo, 错误信息)：限速 / 网络问题，下次运行会重试
     ok_count = 0   # 成功取到数据的工具数
     fatal = None
 
     for t in tools:
         repo = t['repo']
+        offline = bool(t.get('repoOffline'))
+
+        # 已声明「仓库暂不可访问」的条目：默认不浪费配额去请求
+        if offline and not recheck_offline:
+            skipped.append(repo)
+            continue
+
         try:
             info = api('https://api.github.com/repos/' + repo)
         except Fatal as e:
@@ -139,12 +161,19 @@ def main():
             continue
 
         if info is None:
+            if offline:
+                pin_offline.append(repo)  # 复查后仍 404：保持 repoOffline，不升级为 dead
+                continue
             gone.append(repo)
             if not t.get('dead'):
                 t['dead'] = True
                 t['deadSince'] = today
                 changed.append((repo, f'⛔ 仓库已下线（404），于 {today} 标记 dead 并停止展示为可访问'))
             continue
+
+        if offline:  # 复查通过：GitHub 恢复了，摘掉标记
+            t.pop('repoOffline', None)
+            changed.append((repo, '✅ GitHub 仓库恢复可访问，已取消 repoOffline 标记'))
 
         revived = bool(t.pop('dead', None))  # 之前标记过下线、现在又能访问了 → 自愈
         t.pop('deadSince', None)
@@ -189,6 +218,15 @@ def main():
     for repo, note in changed:
         print(f'  {repo}: {note}')
 
+    if skipped:
+        print(f'ℹ️ {len(skipped)} 个工具已标记「仓库暂不可访问」，本轮跳过轮询'
+              '（加 --recheck-offline 可强制复查）：')
+        for repo in skipped:
+            print(f'  {repo}')
+    if pin_offline:
+        print(f'ℹ️ {len(pin_offline)} 个工具复查后仍不可访问，保持 repoOffline 标记：')
+        for repo in pin_offline:
+            print(f'  {repo}')
     if gone:
         print(f'⛔ {len(gone)} 个仓库已下线（404），已标记 dead 并跳过，不影响本次运行：')
         for repo in gone:
@@ -198,7 +236,7 @@ def main():
         for repo, err in errors:
             print(f'  {repo}: {err}', file=sys.stderr)
 
-    write_summary(now, changed, gone, errors, fatal)  # 先落摘要，再决定退出码
+    write_summary(now, changed, gone, skipped, pin_offline, errors, fatal)  # 先落摘要，再决定退出码
 
     if fatal:
         print(f'❌ {fatal}', file=sys.stderr)

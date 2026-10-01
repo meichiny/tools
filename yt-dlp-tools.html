@@ -214,8 +214,9 @@
     font-size: 12px;
     line-height: 1.7;
   }
-  /* 仓库已下线（404）：中性描边胶囊，与「停更」的红色实心胶囊区分开 */
-  .dead {
+  /* 仓库已下线（404）／仓库暂不可访问：中性描边胶囊，与「停更」的红色实心胶囊区分开 */
+  .dead,
+  .offline {
     color: var(--muted);
     font-weight: 800;
     border: 1.5px solid var(--line);
@@ -349,6 +350,16 @@
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
+  // 工具的「可去地址」：优先官网 homepage，退回 GitHub 仓库
+  function toolHref(t) {
+    return t.homepage || `https://github.com/${t.repo}`;
+  }
+  // 卡片右侧的次要标签：有官网就显示官网域名，否则显示 owner/repo
+  function toolLabel(t) {
+    if (!t.homepage) return t.repo || '';
+    try { return new URL(t.homepage).host; } catch { return t.homepage; }
+  }
+
   function render(data) {
     const m = data.meta || {};
     document.title = (m.title || 'yt-dlp 工具集') + '｜基于 yt-dlp 的视频下载工具';
@@ -411,20 +422,22 @@
   }
 
   function toolCard(t) {
-    // 仓库已下线：名字不再是死链，改为纯文本 + 中性胶囊标注
+    // dead：仓库已下线（404）→ 名字退化为纯文本，避免死链
+    // repoOffline：仓库暂不可访问（如账号被限制）→ 名字改指向 homepage 官网
     const dead = !!t.dead;
     const name = dead
       ? `<span class="tool-name">${t.name}</span>`
-      : `<a class="tool-name" href="https://github.com/${t.repo}" target="_blank" rel="noopener">${t.name}</a>`;
+      : `<a class="tool-name" href="${toolHref(t)}" target="_blank" rel="noopener">${t.name}</a>`;
     return `
       <article class="tool${dead ? ' is-dead' : ''}">
         <div class="tool-top">
           ${name}
-          <span class="tool-repo">${t.repo}</span>
+          <span class="tool-repo">${toolLabel(t)}</span>
         </div>
         <p class="tool-desc">${t.desc || ''}</p>
         <div class="tool-meta">
           ${dead ? `<span class="dead">⛔ 已下线${t.deadSince ? `（${t.deadSince}）` : ''}</span>` : ''}
+          ${!dead && t.repoOffline ? '<span class="offline">⚠️ 仓库暂不可访问</span>' : ''}
           ${!dead && t.stale ? '<span class="stale">⚠️ 停更</span>' : ''}
           <span>⭐ <b class="star">${fmtStars(t.stars)}</b></span>
           <span>🕐 <b>${fmtDate(t.lastPush)}</b></span>
