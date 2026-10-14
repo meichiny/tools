@@ -6,4 +6,5 @@ Useful html tools built with DeepSeek.
 - [Markdown 学习工坊](https://meichiny.github.io/tools/markdown-tutor.html)：边学边练的 Markdown 入门工具——实时预览、语法卡片对照学习、闯关挑战，100% 本地离线
 - [装机小课堂](https://meichiny.github.io/tools/install-game.html)：三关闯关学认软件安装包——格式识别、正规渠道、防骗知识，100% 本地离线
 - [yt-dlp 工具集](https://meichiny.github.io/tools/yt-dlp-tools.html)：分类列举基于 yt-dlp 的视频下载工具——GitHub 开源项目，在活跃维护、star ≥ 50 或功能独特的，按命令行 / 桌面 GUI / Web 自托管 / Android 分类，附 star 与更新状态
+- [结构化文本转 Excel](https://meichiny.github.io/tools/structured-text-to-excel.html)：把 `<名字>张三</名字>` 这类标签化文本解析成表格并下载 .xlsx——字段自动识别、列可拖拽排序、支持 URL 传参（d / text / url）直接带内容进来，100% 本地离线
 

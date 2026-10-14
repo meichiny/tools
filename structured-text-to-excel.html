@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>结构化文本 → Excel 转换工具</title>
+<style>
+  :root{
+    --bg:#f5f6f8;
+    --card:#ffffff;
+    --border:#e5e7eb;
+    --border-strong:#d1d5db;
+    --text:#1f2328;
+    --text-2:#57606a;
+    --text-3:#8b949e;
+    --accent:#2563eb;
+    --accent-weak:#eff6ff;
+    --green:#1a7f37;
+    --green-weak:#eaf6ee;
+    --red:#cf222e;
+    --red-weak:#fdeceb;
+    --amber-weak:#fff8e5;
+    --amber:#9a6700;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font:14px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1400px;margin:0 auto;padding:24px 20px 60px;}
+  header.top{margin-bottom:18px;}
+  header.top h1{font-size:20px;margin:0 0 6px;font-weight:600;letter-spacing:.2px;}
+  header.top p{margin:0;color:var(--text-2);font-size:13px;}
+  .layout{display:grid;grid-template-columns:minmax(380px,5fr) minmax(420px,7fr);gap:16px;align-items:start;}
+  @media (max-width:1080px){.layout{grid-template-columns:1fr;}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .card > .hd{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:11px 14px;border-bottom:1px solid var(--border);background:#fbfcfd;
+  }
+  .card > .hd h2{margin:0;font-size:13px;font-weight:600;color:var(--text);letter-spacing:.3px;}
+  .card > .hd .sub{font-size:12px;color:var(--text-3);font-weight:400;}
+  .card > .bd{padding:14px;}
+  textarea{
+    width:100%;min-height:390px;resize:vertical;
+    border:1px solid var(--border-strong);border-radius:8px;padding:12px 13px;
+    font:13px/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,"PingFang SC",monospace;
+    color:var(--text);background:#fff;outline:none;
+  }
+  textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  button{
+    font:inherit;font-size:13px;cursor:pointer;border-radius:8px;padding:7px 14px;
+    border:1px solid var(--border-strong);background:#fff;color:var(--text);transition:.15s;
+  }
+  button:hover{border-color:#b6bcc4;background:#f7f8fa;}
+  button:active{transform:translateY(1px);}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;}
+  button.primary:hover{background:#1d4ed8;border-color:#1d4ed8;}
+  button.primary:disabled{background:#a8c1f8;border-color:#a8c1f8;cursor:not-allowed;transform:none;}
+  button.ghost{border-color:transparent;color:var(--text-2);}
+  button.ghost:hover{background:#eef0f3;border-color:transparent;}
+  .opt{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-2);cursor:pointer;user-select:none;}
+  .opt input{accent-color:var(--accent);}
+  .fields{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .chip{
+    display:inline-flex;align-items:center;gap:5px;
+    border:1px solid var(--border-strong);border-radius:999px;padding:3px 10px;
+    font-size:12.5px;background:#fff;cursor:grab;color:var(--text);
+  }
+  .chip:hover{background:#f7f8fa;}
+  .chip.dragging{opacity:.4;}
+  .chip.drop-target{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.15);}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;}
+  .chip.off{color:var(--text-3);background:#fafbfc;border-style:dashed;}
+  .chip.off .dot{background:#c9ced4;}
+  .chip .idx{font-size:11px;color:var(--text-3);font-variant-numeric:tabular-nums;}
+  .stats{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--text-2);margin-bottom:10px;}
+  .stats b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;}
+  .tablebox{overflow:auto;max-height:520px;border:1px solid var(--border);border-radius:8px;background:#fff;}
+  table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;}
+  th,td{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top;white-space:pre-wrap;word-break:break-word;}
+  th{
+    position:sticky;top:0;z-index:2;background:#eef4ff;color:#1b3a6b;font-weight:600;
+    white-space:nowrap;border-bottom:1px solid #d6e2f7;
+  }
+  tbody tr:nth-child(even) td{background:#fcfcfd;}
+  tbody tr:hover td{background:#f2f7ff;}
+  td.idx-cell{color:var(--text-3);text-align:right;font-variant-numeric:tabular-nums;background:#fafbfc;white-space:nowrap;width:1%;}
+  th.idx-cell{text-align:right;}
+  .empty{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    min-height:220px;color:var(--text-3);font-size:13px;text-align:center;padding:24px;
+  }
+  .empty .big{font-size:28px;opacity:.5;}
+  .msg{margin-top:10px;font-size:12.5px;border-radius:8px;padding:8px 11px;display:none;}
+  .msg.err{display:block;background:var(--red-weak);color:var(--red);border:1px solid #f6d0cd;}
+  .msg.warn{display:block;background:var(--amber-weak);color:var(--amber);border:1px solid #f0e0b6;}
+  .msg.ok{display:block;background:var(--green-weak);color:var(--green);border:1px solid #cfe8d6;}
+  .hint{font-size:12px;color:var(--text-3);margin-top:10px;line-height:1.7;}
+  .hint code{background:#f2f3f5;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:11.5px;}
+  details.card > summary.hd{cursor:pointer;list-style:none;user-select:none;}
+  details.card > summary.hd::-webkit-details-marker{display:none;}
+  details.card > summary.hd::after{
+    content:'▸';margin-left:2px;color:var(--text-3);font-size:12px;transition:transform .18s;display:inline-block;
+  }
+  details.card[open] > summary.hd::after{transform:rotate(90deg);}
+  details.card[open] > summary.hd{border-bottom:1px solid var(--border);}
+  details.card > summary.hd:hover{background:#f4f6f8;}
+  .toast{
+    position:fixed;left:50%;bottom:32px;transform:translate(-50%,20px);
+    background:#1f2328;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;
+    opacity:0;pointer-events:none;transition:.22s;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.18);
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>结构化文本 → Excel 转换工具</h1>
+    <p>把 <code>&lt;字段&gt;内容&lt;/字段&gt;</code> 形式的结构化文本解析成表格并下载 .xlsx 文件。线上使用时通常用 <b>URL 传参</b>直接带内容进来（见底部说明），也可展开左侧面板手动粘贴。全程在浏览器本机完成，不上传任何数据。</p>
+  </header>
+
+  <div class="layout">
+    <!-- 左：输入（默认折叠） -->
+    <details class="card" id="inputCard">
+      <summary class="hd">
+        <h2>① 粘贴结构化文本</h2>
+        <span class="sub" id="inputCount">点击展开手动粘贴</span>
+      </summary>
+      <div class="bd">
+        <textarea id="src" spellcheck="false" placeholder="在此粘贴，例如：
+
+<名字>张三</名字>
+<电话>12345678901</电话>
+<耳道检查情况>无异常</耳道检查情况>
+<是否测听>是</是否测听>
+<听力情况>轻度听损</听力情况>
+<备注>日常观察留意</备注>
+<分割>
+<名字>李四</名字>
+<电话>98765432101</电话>
+..."></textarea>
+
+        <div class="toolbar">
+          <button id="btnDemo" class="ghost">载入示例</button>
+          <button id="btnPaste" class="ghost">从剪贴板粘贴</button>
+          <button id="btnClear" class="ghost">清空</button>
+        </div>
+
+        <div class="toolbar" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);">
+          <label class="opt"><input type="checkbox" id="optAutoSplit" checked /> 重复字段自动拆分为新记录</label>
+          <label class="opt"><input type="checkbox" id="optIndex" checked /> 导出含序号列</label>
+        </div>
+
+        <div class="hint">
+          支持的分隔写法：<code>&lt;分割&gt;</code> <code>&lt;分割线&gt;</code> <code>&lt;split&gt;</code>，或单独一行 <code>---</code> / <code>===</code>。
+          字段名可任意扩展，未在示例中的字段会按出现顺序自动追加为列。全角括号 <code>＜＞</code> 会自动纠正。
+        </div>
+        <div class="msg" id="msg"></div>
+      </div>
+    </details>
+
+    <!-- 右：预览 + 导出 -->
+    <section class="card">
+      <div class="hd">
+        <h2>② 预览与导出</h2>
+        <span class="sub" id="fileNameTip"></span>
+      </div>
+      <div class="bd">
+        <div class="stats">
+          <span>记录数：<b id="statRows">0</b></span>
+          <span>字段数：<b id="statCols">0</b></span>
+          <span>导出列：<b id="statExp">0</b></span>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px;color:var(--text-3);margin-bottom:6px;">字段（点击可隐藏/显示，拖动可调整列顺序）</div>
+          <div class="fields" id="fields"></div>
+        </div>
+
+        <div class="tablebox" id="tablebox">
+          <div class="empty"><div class="big">▤</div><div>左侧输入内容后，这里会实时显示表格预览</div></div>
+        </div>
+
+        <div class="toolbar" style="margin-top:12px;">
+          <button id="btnXlsx" class="primary" disabled>下载 Excel（.xlsx）</button>
+          <span style="flex:1"></span>
+          <span style="font-size:12px;color:var(--text-3);align-self:center;">文件名：<input id="fname" value="听力筛查记录" style="font:inherit;font-size:12.5px;border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;width:150px;color:var(--text);" /></span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- URL 参数说明（默认折叠） -->
+  <details class="card" style="margin-top:16px;">
+    <summary class="hd">
+      <h2>③ URL 传参说明（部署到线上后可用）</h2>
+      <span class="sub">点击展开 · 参数优先级：d / data &gt; text &gt; url &gt; 锚点 #</span>
+    </summary>
+    <div class="bd">
+      <table style="font-size:12.5px;">
+        <thead><tr><th style="width:130px;">参数</th><th style="width:190px;">示例</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>d</code> / <code>data</code></td><td><code>?d=JTNDaGVhZCUzRQ</code></td><td><b>推荐</b>。结构化文本的 Base64URL 编码（UTF-8），可避免换行与特殊字符导致的链接错乱</td></tr>
+          <tr><td><code>text</code> / <code>t</code></td><td><code>?text=%3C%E5%90%8D%E5%AD%97%3E...</code></td><td>结构化文本原文，需做 URL encode</td></tr>
+          <tr><td><code>url</code> / <code>src</code></td><td><code>?url=https://a.com/a.txt</code></td><td>远端文本地址，页面自动拉取（目标服务需允许跨域 CORS）</td></tr>
+          <tr><td colspan="3" style="background:#fafbfc;color:var(--text-3);font-size:12px;">以下为可选控制参数</td></tr>
+          <tr><td><code>name</code></td><td><code>?name=10月筛查</code></td><td>导出文件名前缀，最终为 <code>名称_日期.xlsx</code></td></tr>
+          <tr><td><code>sheet</code></td><td><code>?sheet=名单</code></td><td>Excel 工作表标签名</td></tr>
+          <tr><td><code>fields</code> / <code>cols</code></td><td><code>?fields=名字,电话,备注</code></td><td>指定列顺序（逗号或顿号分隔），未列出的字段仍会追加在后面</td></tr>
+          <tr><td><code>hide</code></td><td><code>?hide=备注,是否测听</code></td><td>隐藏指定列，不参与导出</td></tr>
+          <tr><td><code>index</code></td><td><code>?index=0</code></td><td>设为 <code>0</code> 时不加序号列，默认 <code>1</code></td></tr>
+          <tr><td><code>split</code></td><td><code>?split=0</code></td><td>设为 <code>0</code> 时关闭「重复字段自动拆分新记录」，默认 <code>1</code></td></tr>
+          <tr><td><code>auto</code></td><td><code>?auto=1</code></td><td>载入并解析成功后<b>自动触发一次下载</b>，适合从其它系统一键跳转导出</td></tr>
+        </tbody>
+      </table>
+      <div class="hint">
+        文本较长时建议放锚点：<code>页面地址#&lt;名字&gt;张三&lt;/名字&gt;…</code>，锚点内容不会发送到服务器。
+        <code>d</code> 参数需自行对原文做 UTF-8 Base64 编码，再把 <code>+</code> 换成 <code>-</code>、<code>/</code> 换成 <code>_</code>、去掉结尾 <code>=</code>。
+      </div>
+    </div>
+  </details>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===================== 核心引擎（纯函数，无 DOM 依赖） ===================== -->
+<script id="engine">
+/* ===ENGINE_START=== */
+var ENGINE = (function () {
+  'use strict';
+
+  /* ---------- CRC32 ---------- */
+  var crcTable = null;
+  function crc32(buf) {
+    if (!crcTable) {
+      crcTable = new Int32Array(256);
+      for (var n = 0; n < 256; n++) {
+        var c = n;
+        for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        crcTable[n] = c;
+      }
+    }
+    var crc = -1;
+    for (var i = 0; i < buf.length; i++) crc = (crc >>> 8) ^ crcTable[(crc ^ buf[i]) & 0xFF];
+    return (crc ^ -1) >>> 0;
+  }
+
+  function dosDateTime(d) {
+    var time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    var date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    return { time: time, date: date };
+  }
+
+  /* ---------- 极简 ZIP 写入器（STORE 无压缩） ---------- */
+  function zipFiles(files) {
+    var enc = new TextEncoder();
+    var stamp = dosDateTime(new Date());
+    var chunks = [], central = [], offset = 0;
+
+    files.forEach(function (f) {
+      var nameBytes = enc.encode(f.name);
+      var data = f.data;
+      var crc = crc32(data);
+
+      var lh = new Uint8Array(30 + nameBytes.length);
+      var lv = new DataView(lh.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true);      // version needed
+      lv.setUint16(6, 0x0800, true);  // UTF-8 flag
+      lv.setUint16(8, 0, true);       // stored
+      lv.setUint16(10, stamp.time, true);
+      lv.setUint16(12, stamp.date, true);
+      lv.setUint32(14, crc, true);
+      lv.setUint32(18, data.length, true);
+      lv.setUint32(22, data.length, true);
+      lv.setUint16(26, nameBytes.length, true);
+      lv.setUint16(28, 0, true);
+      lh.set(nameBytes, 30);
+
+      chunks.push(lh);
+      chunks.push(data);
+
+      var ch = new Uint8Array(46 + nameBytes.length);
+      var cv = new DataView(ch.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);      // version made by
+      cv.setUint16(6, 20, true);      // version needed
+      cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, stamp.time, true);
+      cv.setUint16(14, stamp.date, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, data.length, true);
+      cv.setUint32(24, data.length, true);
+      cv.setUint16(28, nameBytes.length, true);
+      cv.setUint16(30, 0, true);      // extra len
+      cv.setUint16(32, 0, true);      // comment len
+      cv.setUint16(34, 0, true);      // disk start
+      cv.setUint16(36, 0, true);      // internal attrs
+      cv.setUint32(38, 0, true);      // external attrs
+      cv.setUint32(42, offset, true); // local header offset
+      ch.set(nameBytes, 46);
+      central.push(ch);
+
+      offset += lh.length + data.length;
+    });
+
+    var cdSize = central.reduce(function (a, b) { return a + b.length; }, 0);
+    var eocd = new Uint8Array(22);
+    var ev = new DataView(eocd.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(4, 0, true);
+    ev.setUint16(6, 0, true);
+    ev.setUint16(8, files.length, true);
+    ev.setUint16(10, files.length, true);
+    ev.setUint32(12, cdSize, true);
+    ev.setUint32(16, offset, true);
+    ev.setUint16(20, 0, true);
+
+    return new Blob(chunks.concat(central, [eocd]), {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  }
+
+  /* ---------- XML 工具 ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&apos;')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+  }
+  function colLetter(n) {
+    var s = '';
+    while (n > 0) { var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = (n - m - 1) / 26; }
+    return s;
+  }
+  function units(s) {
+    s = String(s == null ? '' : s);
+    var w = 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      w += (c >= 0x1100 && (c <= 0x115F || c === 0x2329 || c === 0x232A ||
+        (c >= 0x2E80 && c <= 0xA4CF && c !== 0x303F) ||
+        (c >= 0xAC00 && c <= 0xD7A3) || (c >= 0xF900 && c <= 0xFAFF) ||
+        (c >= 0xFE30 && c <= 0xFE6F) || (c >= 0xFF00 && c <= 0xFF60) ||
+        (c >= 0xFFE0 && c <= 0xFFE6))) ? 2 : 1;
+    }
+    return w;
+  }
+
+  /* ---------- 解析 ---------- */
+  var DEFAULT_FIELDS = ['名字', '电话', '耳道检查情况', '是否测听', '听力情况', '备注'];
+  var SEP_NAME_RE = /^(分割|分割线|split|separator|hr|break|next)$/i;
+  var TAG_RE = /<\s*([^\s<>\/]+?)\s*(?:\/\s*>|>\s*([\s\S]*?)<\s*\/\s*\1\s*>)/g;
+  var SEP_RE = /<\s*(?:分割|分割线|split|separator|hr)\s*\/?\s*>/gi;
+
+  function parseText(raw, opts) {
+    opts = opts || {};
+    var autoSplit = opts.autoSplit !== false;
+
+    var text = String(raw == null ? '' : raw)
+      .replace(/[＜]/g, '<').replace(/[＞]/g, '>')
+      .replace(/\r\n?/g, '\n');
+    text = text.replace(/^[ \t]*(-{3,}|={3,}|\*{3,}|#{3,})[ \t]*$/gm, '<分割>');
+
+    var chunks = text.split(SEP_RE);
+    var records = [], fieldOrder = [], seen = Object.create(null);
+
+    chunks.forEach(function (chunk) {
+      var cur = Object.create(null), curKeys = Object.create(null), has = false, m;
+      TAG_RE.lastIndex = 0;
+      while ((m = TAG_RE.exec(chunk)) !== null) {
+        var key = (m[1] || '').trim();
+        if (!key || SEP_NAME_RE.test(key)) continue;
+        var val = m[2] === undefined ? '' : m[2];
+        val = val.replace(/^[ \t]*\n/, '').replace(/[ \t]+$/gm, '').replace(/^\s+|\s+$/g, '');
+
+        if (autoSplit && curKeys[key]) {
+          if (has) records.push(cur);
+          cur = Object.create(null); curKeys = Object.create(null); has = false;
+        }
+        if (curKeys[key]) cur[key] = cur[key] ? cur[key] + '\n' + val : val;
+        else { cur[key] = val; curKeys[key] = 1; }
+        has = true;
+        if (!seen[key]) { seen[key] = 1; fieldOrder.push(key); }
+      }
+      if (has) records.push(cur);
+    });
+
+    var headers = [];
+    DEFAULT_FIELDS.forEach(function (k) { if (seen[k]) headers.push(k); });
+    fieldOrder.forEach(function (k) { if (headers.indexOf(k) < 0) headers.push(k); });
+
+    var rows = records.map(function (r) {
+      return headers.map(function (h) { return r[h] || ''; });
+    });
+
+    return { headers: headers, rows: rows, allFields: fieldOrder, recordCount: rows.length };
+  }
+
+  /* ---------- XLSX 生成 ---------- */
+  var XMLH = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n';
+  var NS = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+  var RELNS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  var PKGRELNS = 'http://schemas.openxmlformats.org/package/2006/relationships';
+  var CTNS = 'http://schemas.openxmlformats.org/package/2006/content-types';
+
+  function b(str) { return new TextEncoder().encode(str); }
+
+  function stylesXml() {
+    return XMLH +
+      '<styleSheet xmlns="' + NS + '">' +
+      '<fonts count="2">' +
+        '<font><sz val="11"/><color theme="1"/><name val="等线"/></font>' +
+        '<font><b/><sz val="11"/><color theme="1"/><name val="等线"/></font>' +
+      '</fonts>' +
+      '<fills count="3">' +
+        '<fill><patternFill patternType="none"/></fill>' +
+        '<fill><patternFill patternType="gray125"/></fill>' +
+        '<fill><patternFill patternType="solid"><fgColor rgb="FFDCE6F1"/><bgColor indexed="64"/></patternFill></fill>' +
+      '</fills>' +
+      '<borders count="2">' +
+        '<border><left/><right/><top/><bottom/><diagonal/></border>' +
+        '<border>' +
+          '<left style="thin"><color rgb="FFB7B7B7"/></left>' +
+          '<right style="thin"><color rgb="FFB7B7B7"/></right>' +
+          '<top style="thin"><color rgb="FFB7B7B7"/></top>' +
+          '<bottom style="thin"><color rgb="FFB7B7B7"/></bottom>' +
+          '<diagonal/>' +
+        '</border>' +
+      '</borders>' +
+      '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+      '<cellXfs count="3">' +
+        '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+        '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>' +
+        '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
+      '</cellXfs>' +
+      '<cellStyles count="1"><cellStyle name="常规" xfId="0" builtinId="0"/></cellStyles>' +
+      '</styleSheet>';
+  }
+
+  function sheetXml(headers, rows) {
+    var ncols = headers.length;
+    var nrows = rows.length;
+    var lastCol = colLetter(ncols);
+    var lastRow = nrows + 1;
+    var dim = 'A1:' + lastCol + lastRow;
+
+    var cols = headers.map(function (h, i) {
+      var maxU = units(h);
+      for (var r = 0; r < rows.length; r++) {
+        var v = String(rows[r][i] || '');
+        v.split('\n').forEach(function (line) { maxU = Math.max(maxU, units(line)); });
+      }
+      var w = Math.max(9, Math.min(48, Math.round(maxU * 1.05) + 3));
+      return '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + w + '" customWidth="1"/>';
+    }).join('');
+
+    function cell(ref, val, style) {
+      return '<c r="' + ref + '" s="' + style + '" t="inlineStr"><is><t xml:space="preserve">' +
+        esc(val) + '</t></is></c>';
+    }
+
+    var head = '<row r="1" ht="26" customHeight="1" spans="1:' + ncols + '">';
+    headers.forEach(function (h, i) { head += cell(colLetter(i + 1) + '1', h, 1); });
+    head += '</row>';
+
+    var body = '';
+    for (var r = 0; r < rows.length; r++) {
+      var rn = r + 2;
+      body += '<row r="' + rn + '" spans="1:' + ncols + '">';
+      for (var c = 0; c < ncols; c++) {
+        body += cell(colLetter(c + 1) + rn, rows[r][c], 2);
+      }
+      body += '</row>';
+    }
+
+    return XMLH +
+      '<worksheet xmlns="' + NS + '" xmlns:r="' + RELNS + '">' +
+      '<dimension ref="' + dim + '"/>' +
+      '<sheetViews><sheetView workbookViewId="0">' +
+        '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>' +
+      '</sheetView></sheetViews>' +
+      '<sheetFormatPr defaultRowHeight="19" customHeight="1"/>' +
+      '<cols>' + cols + '</cols>' +
+      '<sheetData>' + head + body + '</sheetData>' +
+      '<autoFilter ref="' + dim + '"/>' +
+      '</worksheet>';
+  }
+
+  function buildXlsx(headers, rows, sheetName) {
+    var name = String(sheetName || 'Sheet1').replace(/[\\\/\?\*\[\]:]/g, '_').slice(0, 31) || 'Sheet1';
+
+    var contentTypes = XMLH +
+      '<Types xmlns="' + CTNS + '">' +
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+      '<Default Extension="xml" ContentType="application/xml"/>' +
+      '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+      '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+      '</Types>';
+
+    var rootRels = XMLH +
+      '<Relationships xmlns="' + PKGRELNS + '">' +
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+      '</Relationships>';
+
+    var workbook = XMLH +
+      '<workbook xmlns="' + NS + '" xmlns:r="' + RELNS + '">' +
+      '<sheets><sheet name="' + esc(name) + '" sheetId="1" r:id="rId1"/></sheets>' +
+      '</workbook>';
+
+    var wbRels = XMLH +
+      '<Relationships xmlns="' + PKGRELNS + '">' +
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+      '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+      '</Relationships>';
+
+    return zipFiles([
+      { name: '[Content_Types].xml', data: b(contentTypes) },
+      { name: '_rels/.rels', data: b(rootRels) },
+      { name: 'xl/workbook.xml', data: b(workbook) },
+      { name: 'xl/_rels/workbook.xml.rels', data: b(wbRels) },
+      { name: 'xl/styles.xml', data: b(stylesXml()) },
+      { name: 'xl/worksheets/sheet1.xml', data: b(sheetXml(headers, rows)) }
+    ]);
+  }
+
+  return {
+    crc32: crc32, zipFiles: zipFiles, parseText: parseText,
+    buildXlsx: buildXlsx, colLetter: colLetter
+  };
+})();
+/* ===ENGINE_END=== */
+</script>
+
+<!-- ===================== 界面逻辑 ===================== -->
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  var src = $('src'), tablebox = $('tablebox'), fieldsBox = $('fields');
+  var btnXlsx = $('btnXlsx');
+  var msg = $('msg'), toast = $('toast');
+  var SHEET_NAME = '筛查记录';
+  var pending = null;   // URL 参数待应用项
+
+  var state = { headers: [], rows: [], hidden: Object.create(null), order: [] };
+
+  var DEMO = [
+    '<名字>张三</名字>',
+    '<电话>12345678901</电话>',
+    '<耳道检查情况>无异常</耳道检查情况>',
+    '<是否测听>是</是否测听>',
+    '<听力情况>轻度听损</听力情况>',
+    '<备注>日常观察留意</备注>',
+    '<分割>',
+    '<名字>李四</名字>',
+    '<电话>98765432101</电话>',
+    '<耳道检查情况>无异常</耳道检查情况>',
+    '<是否测听>否</是否测听>',
+    '<听力情况>重度听损</听力情况>',
+    '<备注>建议转诊</备注>',
+    '<分割>',
+    '<名字>王五</名字>',
+    '<电话>13512345678</电话>',
+    '<耳道检查情况>左耳耵聍栓塞</耳道检查情况>',
+    '<是否测听>是</是否测听>',
+    '<听力情况>中度听损</听力情况>',
+    '<备注>先清理耵聍，两周后复查</备注>'
+  ].join('\n');
+
+  function showToast(t) {
+    toast.textContent = t;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toast.classList.remove('show'); }, 2000);
+  }
+
+  function setMsg(kind, text) {
+    if (!text) { msg.className = 'msg'; msg.textContent = ''; return; }
+    msg.className = 'msg ' + kind;
+    msg.textContent = text;
+    // 提示写在折叠的 ① 面板内，出错/警告时自动展开，避免用户看不见
+    if (kind === 'err' || kind === 'warn') {
+      if (!$('inputCard').open) $('inputCard').open = true;
+      if (kind === 'err') showToast(text);
+    }
+  }
+
+  function htmlEsc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function visibleHeaders() {
+    return state.order.filter(function (h) { return !state.hidden[h]; });
+  }
+
+  function renderFields() {
+    fieldsBox.innerHTML = '';
+    if (!state.order.length) {
+      fieldsBox.innerHTML = '<span style="font-size:12.5px;color:var(--text-3)">尚未识别到字段</span>';
+      return;
+    }
+    state.order.forEach(function (h, i) {
+      var off = !!state.hidden[h];
+      var el = document.createElement('span');
+      el.className = 'chip' + (off ? ' off' : '');
+      el.draggable = true;
+      el.dataset.field = h;
+      el.title = off ? '点击显示该列' : '点击隐藏该列（可拖动排序）';
+      el.innerHTML = '<span class="dot"></span><span>' + htmlEsc(h) + '</span><span class="idx">' + (i + 1) + '</span>';
+      el.addEventListener('click', function () {
+        state.hidden[h] = !state.hidden[h];
+        renderFields(); renderTable();
+      });
+      el.addEventListener('dragstart', function (e) {
+        e.dataTransfer.setData('text/plain', h);
+        e.dataTransfer.effectAllowed = 'move';
+        el.classList.add('dragging');
+      });
+      el.addEventListener('dragend', function () {
+        el.classList.remove('dragging');
+        Array.prototype.forEach.call(fieldsBox.children, function (c) { c.classList.remove('drop-target'); });
+      });
+      el.addEventListener('dragover', function (e) {
+        e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+        el.classList.add('drop-target');
+      });
+      el.addEventListener('dragleave', function () { el.classList.remove('drop-target'); });
+      el.addEventListener('drop', function (e) {
+        e.preventDefault();
+        el.classList.remove('drop-target');
+        var from = e.dataTransfer.getData('text/plain');
+        if (!from || from === h) return;
+        var oi = state.order.indexOf(from), ti = state.order.indexOf(h);
+        if (oi < 0 || ti < 0) return;
+        state.order.splice(oi, 1);
+        state.order.splice(ti, 0, from);
+        renderFields(); renderTable();
+      });
+      fieldsBox.appendChild(el);
+    });
+  }
+
+  function renderTable() {
+    var vis = visibleHeaders();
+    var withIndex = $('optIndex').checked;
+    if (!state.rows.length || !vis.length) {
+      tablebox.innerHTML = '<div class="empty"><div class="big">▤</div><div>' +
+        (state.rows.length && !vis.length ? '所有字段都被隐藏了，点击上方字段重新显示' : '还没有内容') +
+        '</div>' +
+        (state.rows.length ? '' :
+          '<div style="font-size:12.5px;color:var(--text-3);">用 URL 参数 <code>d</code> / <code>text</code> / <code>url</code> 传入内容，或</div>' +
+          '<div class="toolbar" style="justify-content:center;">' +
+            '<button id="btnExpand">展开输入框粘贴</button>' +
+            '<button id="btnDemo2" class="ghost">载入示例</button>' +
+          '</div>') +
+        '</div>';
+      var be = $('btnExpand');
+      if (be) be.addEventListener('click', function () {
+        $('inputCard').open = true;
+        src.focus();
+      });
+      var bd2 = $('btnDemo2');
+      if (bd2) bd2.addEventListener('click', function () {
+        $('inputCard').open = true;
+        src.value = DEMO; parse(); src.focus();
+      });
+      return;
+    }
+    var h = '<table><thead><tr>';
+    if (withIndex) h += '<th class="idx-cell">#</th>';
+    vis.forEach(function (k) { h += '<th>' + htmlEsc(k) + '</th>'; });
+    h += '</tr></thead><tbody>';
+    state.rows.forEach(function (r, ri) {
+      h += '<tr>';
+      if (withIndex) h += '<td class="idx-cell">' + (ri + 1) + '</td>';
+      vis.forEach(function (k) {
+        var v = r[state.headers.indexOf(k)] || '';
+        h += '<td>' + (v === '' ? '<span style="color:#c9ced4">—</span>' : htmlEsc(v)) + '</td>';
+      });
+      h += '</tr>';
+    });
+    h += '</tbody></table>';
+    tablebox.innerHTML = h;
+  }
+
+  function exportMatrix() {
+    var vis = visibleHeaders();
+    var withIndex = $('optIndex').checked;
+    var headers = withIndex ? ['序号'].concat(vis) : vis.slice();
+    var rows = state.rows.map(function (r, i) {
+      var vals = vis.map(function (k) { return r[state.headers.indexOf(k)] || ''; });
+      return withIndex ? [String(i + 1)].concat(vals) : vals;
+    });
+    return { headers: headers, rows: rows };
+  }
+
+  function parse() {
+    var text = src.value;
+    $('inputCount').textContent = text.length ? text.length + ' 字符' : '点击展开手动粘贴';
+
+    if (!text.trim()) {
+      state = { headers: [], rows: [], hidden: state.hidden, order: [] };
+      setMsg('', '');
+      updateStats(); renderFields(); renderTable();
+      return;
+    }
+
+    var res = ENGINE.parseText(text, { autoSplit: $('optAutoSplit').checked });
+
+    if (!res.recordCount) {
+      state = { headers: [], rows: [], hidden: state.hidden, order: [] };
+      setMsg('warn', '未能解析出任何记录。请检查是否使用了 <字段>内容</字段> 的成对标签写法。');
+      updateStats(); renderFields(); renderTable();
+      return;
+    }
+
+    // 保留已有的隐藏状态与顺序，追加新字段
+    var oldOrder = state.order || [];
+    var order = oldOrder.filter(function (h) { return res.headers.indexOf(h) >= 0; });
+    res.headers.forEach(function (h) { if (order.indexOf(h) < 0) order.push(h); });
+
+    state.headers = res.headers;
+    state.rows = res.rows;
+    state.order = order;
+
+    var missing = [];
+    state.rows.forEach(function (r, i) {
+      var empty = true;
+      for (var j = 0; j < r.length; j++) if (String(r[j]).trim()) { empty = false; break; }
+      if (empty) missing.push(i + 1);
+    });
+
+    if (missing.length) setMsg('warn', '第 ' + missing.join('、') + ' 条记录所有字段均为空，导出时会保留为空白行。');
+    else setMsg('ok', '解析成功：' + res.recordCount + ' 条记录，' + res.headers.length + ' 个字段。');
+
+    applyPending(); updateStats(); renderFields(); renderTable();
+  }
+
+  function updateStats() {
+    $('statRows').textContent = state.rows.length;
+    $('statCols').textContent = state.headers.length;
+    $('statExp').textContent = visibleHeaders().length + ($('optIndex').checked ? 1 : 0);
+    var ok = state.rows.length > 0 && visibleHeaders().length > 0;
+    btnXlsx.disabled = !ok;
+    $('fileNameTip').textContent = ok ? ('将导出 ' + state.rows.length + ' 行 × ' + (visibleHeaders().length + ($('optIndex').checked ? 1 : 0)) + ' 列') : '';
+  }
+
+  function stamp() {
+    var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate());
+  }
+
+  function download(blob, filename) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 400);
+  }
+
+  /* ---------- 事件 ---------- */
+  var timer = null;
+  src.addEventListener('input', function () {
+    clearTimeout(timer); timer = setTimeout(parse, 180);
+  });
+  $('optAutoSplit').addEventListener('change', parse);
+  $('optIndex').addEventListener('change', function () { updateStats(); renderTable(); });
+
+  $('btnDemo').addEventListener('click', function () { src.value = DEMO; parse(); showToast('已载入示例数据'); });
+  $('btnClear').addEventListener('click', function () { src.value = ''; parse(); src.focus(); });
+  $('btnPaste').addEventListener('click', function () {
+    if (!navigator.clipboard || !navigator.clipboard.readText) { showToast('当前浏览器不支持读取剪贴板，请手动粘贴（⌘/Ctrl+V）'); src.focus(); return; }
+    navigator.clipboard.readText().then(function (t) {
+      if (!t) { showToast('剪贴板为空'); return; }
+      src.value = (src.value ? src.value.replace(/\s*$/, '\n') + '\n' : '') + t;
+      parse(); showToast('已从剪贴板粘贴');
+    }).catch(function () { showToast('读取剪贴板被拒绝，请手动粘贴'); src.focus(); });
+  });
+
+  function doDownload() {
+    var m = exportMatrix();
+    if (!m.rows.length || !m.headers.length) return false;
+    try {
+      var blob = ENGINE.buildXlsx(m.headers, m.rows, SHEET_NAME);
+      var nm = ($('fname').value.trim() || '导出数据') + '_' + stamp() + '.xlsx';
+      download(blob, nm);
+      showToast('已生成 ' + nm);
+      return true;
+    } catch (e) {
+      setMsg('err', '生成 Excel 失败：' + e.message);
+      return false;
+    }
+  }
+  btnXlsx.addEventListener('click', function () { doDownload(); });
+
+  /* ---------- Base64URL 解码（UTF-8 安全） ---------- */
+  function b64urlDecode(s) {
+    s = String(s).replace(/-/g, '+').replace(/_/g, '/').replace(/\s+/g, '');
+    while (s.length % 4) s += '=';
+    var bin = atob(s), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  /* ---------- URL 参数载入 ---------- */
+  function isOff(v) { return v === '0' || /^(false|no|off)$/i.test(String(v)); }
+  function splitList(v) { return String(v).split(/[,，、|]/).map(function (s) { return s.trim(); }).filter(Boolean); }
+
+  function applyPending() {
+    if (!pending) return;
+    var p = pending; pending = null;
+    if (p.fields && p.fields.length) {
+      var o = [];
+      p.fields.forEach(function (f) { if (state.headers.indexOf(f) >= 0 && o.indexOf(f) < 0) o.push(f); });
+      state.headers.forEach(function (h) { if (o.indexOf(h) < 0) o.push(h); });
+      state.order = o;
+    }
+    if (p.hide && p.hide.length) {
+      p.hide.forEach(function (h) { if (state.headers.indexOf(h) >= 0) state.hidden[h] = true; });
+    }
+    if (p.auto) setTimeout(doDownload, 80);
+  }
+
+  function readParams() {
+    var q = new URLSearchParams(location.search);
+    var p = { text: null, fetchUrl: '', fields: null, hide: null, auto: false, err: '' };
+    var get = function () {
+      for (var i = 0; i < arguments.length; i++) { var v = q.get(arguments[i]); if (v !== null && v !== '') return v; }
+      return null;
+    };
+    var d = get('d', 'data', 'b64');
+    var t = get('text', 't');
+    var u = get('url', 'src');
+    if (d) {
+      try { p.text = b64urlDecode(d); } catch (e) { p.err = '参数 d 解码失败，请确认是 Base64URL 编码（' + e.message + '）'; }
+    }
+    if (p.text == null && t != null) p.text = t;
+    if (p.text == null && !u && location.hash.length > 1) {
+      var h = location.hash.slice(1);
+      try { p.text = decodeURIComponent(h); } catch (e) { p.text = h; }
+    }
+    if (u) p.fetchUrl = u;
+
+    var v;
+    if ((v = get('name', 'filename'))) $('fname').value = v;
+    if ((v = get('sheet'))) SHEET_NAME = v;
+    if ((v = get('index')) !== null) $('optIndex').checked = !isOff(v);
+    if ((v = get('split')) !== null) $('optAutoSplit').checked = !isOff(v);
+    if ((v = get('fields', 'cols'))) p.fields = splitList(v);
+    if ((v = get('hide'))) p.hide = splitList(v);
+    p.auto = /^(1|true|yes|dl|download|xlsx)$/i.test(get('auto') || '');
+    return p;
+  }
+
+  function boot() {
+    var p = readParams();
+    if (p.fetchUrl) {
+      setMsg('ok', '正在从远端载入文本…');
+      fetch(p.fetchUrl, { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function (t) {
+          src.value = t; pending = p; parse();
+          showToast('已从远端载入 ' + state.rows.length + ' 条记录');
+        })
+        .catch(function (e) {
+          setMsg('err', '远端文本载入失败：' + e.message + '（该地址需允许跨域 CORS）');
+        });
+      return;
+    }
+    if (p.text != null && String(p.text).trim()) {
+      src.value = p.text;
+      pending = p;
+      parse();
+      showToast('已通过链接参数载入 ' + state.rows.length + ' 条记录');
+      return;
+    }
+    // 无参数传入：输入框保持为空并折叠，等待 URL 传参或手动展开粘贴
+    parse();
+    // 放在 parse 之后，避免被空内容的 parse 清掉提示
+    if (p.err) setMsg('err', p.err);
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
