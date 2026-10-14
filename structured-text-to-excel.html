@@ -892,6 +892,17 @@ var ENGINE = (function () {
     if (p.err) setMsg('err', p.err);
   }
   boot();
+
+  // 同一标签页里只改锚点时浏览器不会重新加载页面，需手动重新解析
+  window.addEventListener('hashchange', function () {
+    var p = readParams();
+    if (p.text != null && String(p.text).trim()) {
+      src.value = p.text;
+      pending = p;
+      parse();
+      showToast('已按新内容重新载入 ' + state.rows.length + ' 条记录');
+    }
+  });
 })();
 </script>
 </body>
